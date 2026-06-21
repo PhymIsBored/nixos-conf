@@ -71,6 +71,7 @@ in
   home.packages = with pkgs; [
     anki
     gcc
+    naps2
     neovim
     nil
     nixfmt
