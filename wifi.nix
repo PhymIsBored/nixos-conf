@@ -9,7 +9,7 @@
       eap=tls
       identity=${config.sops.placeholder."eduroam/identity"}
       private-key=${config.sops.secrets."eduroam/client_cert.p12".path}
-      private-key-password=${config.sops.placeholder."eduroam/private_key_import_pass"}
+      private-key-password=${config.sops.placeholder."eduroam/pk_pass"}
 
       [connection]
       id=eduroam
