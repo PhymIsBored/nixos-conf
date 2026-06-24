@@ -1,32 +1,88 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./laptop/hardware-configuration.nix
+    ./wifi.nix
+    # ./nvidia.nix
   ];
 
   nix.settings = {
-  experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  auto-optimise-store = true;
-};
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    auto-optimise-store = true;
+  };
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 7d --keep 5";
+    flake = "/home/finn/nixos-conf"; # sets NH_OS_FLAKE variable for you
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  hardware.bluetooth.enable = true;
+
+  networking.hostName = "nix-laptop"; # Define your hostname.
+
+  systemd.services.wpa_supplicant.serviceConfig.BindReadOnlyPaths = [
+    "/run/secrets/"
+    "/run/secrets.d/"
+  ];
+
+  sops = {
+    defaultSopsFile = ./secrets/secrets.yaml;
+    defaultSopsFormat = "yaml";
+    age.keyFile = "/home/finn/.config/sops/age/keys.txt";
+    secrets = {
+      "eduroam/identity" = { };
+      "eduroam/pk_pass" = { };
+      "eduroam/client_cert.p12" = {
+        sopsFile = ./secrets/eduroam_client_cert.p12;
+        format = "binary";
+        group = "wpa_supplicant";
+        mode = "0640";
+      };
+      "eduroam/ca_cert.pem" = {
+        sopsFile = ./secrets/eduroam_ca_cert.pem;
+        format = "binary";
+        group = "wpa_supplicant";
+        mode = "0640";
+      };
+    };
+  };
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.networkmanager.plugins = with pkgs; [ networkmanager-openvpn ];
 
-  # Set your time zone.
+  networking.wireless.iwd.enable = false;
+  # networking.networkmanager.wifi.backend = "iwd";
+  #   networking.wireless.iwd.settings = {
+  #     Network.EnableIPv6 = true;
+  #     Settings.AutoConnect = true;
+  #   };
+  #   environment.etc."iwd/HARICA-TLS-Root-2021-RSA.pem".source = ./secrets/HARICA-TLS-Root-2021-RSA.pem;
+  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.p12".source =
+  #     ./secrets/upb_eduroam_ffranke_08A3BA.p12;
+  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.crt".source =
+  #     ./secrets/upb_eduroam_ffranke_08A3BA.crt;
+  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.key".source =
+  #     ./secrets/upb_eduroam_ffranke_08A3BA.key;
+  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.pem.key".source =
+  #     ./secrets/upb_eduroam_ffranke_08A3BA.pem.key;
+
   time.timeZone = "Europe/Berlin";
 
   # Select internationalisation properties.
@@ -58,17 +114,7 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # NVIDIA
   hardware.graphics.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.production;
-    open = true;
-    powerManagement.enable = true;
-    modesetting.enable = true; # wayland
-
-    nvidiaSettings = true;
-  };
 
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
@@ -118,19 +164,21 @@
     ];
   };
 
-  # Install firefox.
-  # programs.firefox.enable = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim
     alacritty
+    bluetui
     git
+    htop
+    impala
+    less
     neovim
+    openssl
+    vim
     wget
   ];
   environment.variables = {

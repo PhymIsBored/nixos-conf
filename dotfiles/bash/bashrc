@@ -1,0 +1,86 @@
+# Profile
+export HISTCONTROL=ignoreboth
+export MANPAGER='nvim +Man!'
+export EDITOR=nvim
+export PAGER=less
+
+# Command completion
+bind 'TAB:menu-complete'
+# bind -s 'set completion-ignore-case on'
+
+alias vim='nvim'
+alias ls='ls --color=auto -hF'
+alias la='ls -A'
+alias ll='ls -lA'
+alias l.='ls -d .*'
+alias mvim='nvim -M'
+alias wow='echo "yay it worked'
+
+# Colors for command-substitution prompt output.
+# \001 and \002 tell readline these sequences are non-printing.
+readonly cyan=$'\001\e[36m\002'
+readonly green=$'\001\e[32m\002'
+readonly yellow=$'\001\e[33m\002'
+readonly red=$'\001\e[31m\002'
+readonly reset=$'\001\e[0m\002'
+
+# custom prompt
+_prompt_git() {
+  local dot_git ref sha n_ahead n_behind
+
+  dot_git="$(git rev-parse --git-dir 2>/dev/null)" || return
+
+  ref="$(git rev-parse --symbolic-full-name HEAD 2>/dev/null)"
+  ref="${ref#refs/heads/}"
+
+
+  if [ "$ref" = "HEAD" ] || [ -z "$ref" ]; then
+    sha="${cyan}initial${reset}"
+
+    if git rev-parse '@{upstream}' >/dev/null 2>&1; then
+      ref="${green}main${reset}"
+    else
+      ref="${cyan}main${reset}"
+    fi
+  else
+    sha="$(git rev-parse --short HEAD 2>/dev/null)"
+
+    if [ "$(git rev-parse --is-bare-repository 2>/dev/null)" = "true" ]; then
+      sha="${cyan}${sha}${reset}"
+    elif ! git diff-index --quiet --ignore-submodules --cached HEAD 2>/dev/null; then
+      sha="${yellow}${sha}${reset}"
+    elif ! timeout 0.05s git -C "$dot_git/.." diff-index \
+      --quiet --ignore-submodules --diff-filter=ad HEAD 2>/dev/null; then
+      sha="${red}${sha}${reset}"
+    else
+      sha="${green}${sha}${reset}"
+    fi
+
+    if ! git rev-parse '@{upstream}' >/dev/null 2>&1; then
+      ref="${cyan}${ref}${reset}"
+    else
+      n_ahead="$(git rev-list --count @{upstream}..HEAD 2>/dev/null)"
+      n_behind="$(git rev-list --count HEAD..@{upstream} 2>/dev/null)"
+
+      if [ "$n_ahead" -eq 0 ]; then
+        if [ "$n_behind" -eq 0 ]; then
+          ref="${green}${ref}${reset}"
+        else
+          ref="${yellow}${ref}-${n_behind}${reset}"
+        fi
+      else
+        if [ "$n_behind" -eq 0 ]; then
+          ref="${yellow}${ref}+${n_ahead}${reset}"
+        else
+          ref="${red}${ref}+${n_ahead}-${n_behind}${reset}"
+        fi
+      fi
+    fi
+  fi
+
+  #printf '%s %s' "$ref" "$sha" # also print the commit-hash
+  printf '%s' "$ref"
+}
+
+export PS1='${green}\u@\h ${cyan}\w \[$(tput sgr0)\]$(_prompt_git) $ '
+

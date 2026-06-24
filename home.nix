@@ -4,7 +4,7 @@
   ...
 }:
 let
-  dotfiles = "${config.home.homeDirectory}/nixos-conf/config";
+  dotfiles = "${config.home.homeDirectory}/nixos-conf/dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
 in
 {
@@ -14,10 +14,18 @@ in
 
   programs.bash = {
     enable = true;
-    shellAliases.btw = "echo I use nixos, btw";
-    shellAliases.vim = "nvim";
+    initExtra = builtins.readFile ./dotfiles/bash/bashrc;
+    sessionVariables = {
+      EDITOR = "vim";
+    };
   };
-  programs.git.enable = true;
+
+  programs.git = {
+    enable = true;
+    settings = {
+      core.pager = "less -R";
+    };
+  };
   programs.firefox = {
     enable = true;
     profiles.default = {
@@ -25,10 +33,11 @@ in
         "ui.systemUsesDarkTheme" = 1;
         "browser.theme.content-theme" = 2; # 0: Dark, 1: Light, 2: System
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+        "general.autoScroll" = true;
+        "sidebar.verticalTabs" = true;
+        "sidebar.verticalTabs.dragToPinPromo.dismissed" = true;
+        "sidebar.visibility" = "expand-on-hover";
       };
-      # extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      #   darkreader
-      # ];
     };
     policies = {
       ExtensionSettings =
@@ -70,13 +79,25 @@ in
 
   home.packages = with pkgs; [
     anki
+    asusctl
+    betterleaks
+    btop
+    calibre
     gcc
+    julia
     naps2
     neovim
     nil
     nixfmt
     nixpkgs-fmt
     nodejs
+    obsidian
+    openvpn3
+    python3
     ripgrep
+    shellcheck
+    shfmt
+    signal-desktop
+    sops
   ];
 }
