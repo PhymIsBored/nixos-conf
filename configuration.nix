@@ -8,7 +8,8 @@
 {
   imports = [
     ./laptop/hardware-configuration.nix
-    ./wifi.nix
+    #./wifi_wpa.nix
+    ./wifi_iwd.nix
     # ./nvidia.nix
   ];
 
@@ -31,15 +32,11 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = [ "pkcs8_key_parser" ];
 
   hardware.bluetooth.enable = true;
 
   networking.hostName = "nix-laptop"; # Define your hostname.
-
-  systemd.services.wpa_supplicant.serviceConfig.BindReadOnlyPaths = [
-    "/run/secrets/"
-    "/run/secrets.d/"
-  ];
 
   sops = {
     defaultSopsFile = ./secrets/secrets.yaml;
@@ -51,37 +48,35 @@
       "eduroam/client_cert.p12" = {
         sopsFile = ./secrets/eduroam_client_cert.p12;
         format = "binary";
-        group = "wpa_supplicant";
+        #group = "wpa_supplicant";
+        mode = "0640";
+      };
+      "eduroam/client_cert.crt.pem" = {
+        sopsFile = ./secrets/eduroam_client_cert.crt.pem;
+        format = "binary";
+        #group = "wpa_supplicant";
+        mode = "0640";
+      };
+      "eduroam/client_cert.key.pem" = {
+        sopsFile = ./secrets/eduroam_client_cert.key.pem;
+        format = "binary";
+        #group = "wpa_supplicant";
         mode = "0640";
       };
       "eduroam/ca_cert.pem" = {
         sopsFile = ./secrets/eduroam_ca_cert.pem;
         format = "binary";
-        group = "wpa_supplicant";
+        #group = "wpa_supplicant";
         mode = "0640";
       };
+      "finnsWlan5G/psk" = { };
+      "finnsHotspot/psk" = { };
     };
   };
 
   # Enable networking
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = with pkgs; [ networkmanager-openvpn ];
-
-  networking.wireless.iwd.enable = false;
-  # networking.networkmanager.wifi.backend = "iwd";
-  #   networking.wireless.iwd.settings = {
-  #     Network.EnableIPv6 = true;
-  #     Settings.AutoConnect = true;
-  #   };
-  #   environment.etc."iwd/HARICA-TLS-Root-2021-RSA.pem".source = ./secrets/HARICA-TLS-Root-2021-RSA.pem;
-  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.p12".source =
-  #     ./secrets/upb_eduroam_ffranke_08A3BA.p12;
-  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.crt".source =
-  #     ./secrets/upb_eduroam_ffranke_08A3BA.crt;
-  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.key".source =
-  #     ./secrets/upb_eduroam_ffranke_08A3BA.key;
-  #   environment.etc."iwd/upb_eduroam_ffranke_08A3BA.pem.key".source =
-  #     ./secrets/upb_eduroam_ffranke_08A3BA.pem.key;
 
   time.timeZone = "Europe/Berlin";
 

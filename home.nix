@@ -80,7 +80,6 @@ in
   home.packages = with pkgs; [
     anki
     asusctl
-    betterleaks
     btop
     calibre
     gcc
