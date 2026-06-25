@@ -52,16 +52,6 @@
       LC_TELEPHONE = "de_DE.UTF-8";
       LC_TIME = "de_DE.UTF-8";
     };
-
-## keyboard ###################################################################
-  services.xserver.xkb = {
-    layout = "de";
-    variant = "nodeadkeys";
-  };
-
-  console.keyMap = "de-latin1-nodeadkeys";
-
-## keyboard/fcitx5 ############################################################
     inputMethod = {
       type = "fcitx5";
       enable = true;
@@ -73,6 +63,12 @@
       ];
     };
   };
+  services.xserver.xkb = {
+    layout = "de";
+    variant = "nodeadkeys";
+  };
+
+  console.keyMap = "de-latin1-nodeadkeys";
   environment.variables = {
     GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";
@@ -87,7 +83,6 @@
 
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
-
 
   ## printing #################################################################
   services.printing.enable = true;

@@ -16,7 +16,7 @@
 
   hardware.bluetooth.enable = true;
 
-  networking.hostName = "nix-laptop"; # Define your hostname.
+  networking.hostName = "lapnix"; # Define your hostname.
 
   environment.systemPackages = with pkgs; [
     bluetui

@@ -19,11 +19,27 @@
     }:
     {
       nixosConfigurations = {
-        nix-laptop = nixpkgs.lib.nixosSystem {
+        lapnix = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./base.nix
             ./hosts/laptop/laptop.nix
+            sops-nix.nixosModules.sops
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.finn = import ./home.nix;
+              home-manager.backupFileExtension = "backup";
+            }
+          ];
+        };
+        desknix = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./base.nix
+            ./hosts/desktop/desktop.nix
             sops-nix.nixosModules.sops
 
             home-manager.nixosModules.home-manager
