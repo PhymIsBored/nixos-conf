@@ -8,10 +8,6 @@
 
     sops-nix.url = "github:mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    import-tree.url = "github:vic/import-tree";
-    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
   };
 
   outputs =
@@ -22,20 +18,23 @@
       ...
     }:
     {
-      nixosConfigurations.nix-laptop = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          sops-nix.nixosModules.sops
+      nixosConfigurations = {
+        nix-laptop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./base.nix
+            ./hosts/laptop/laptop.nix
+            sops-nix.nixosModules.sops
 
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.finn = import ./home.nix;
-            home-manager.backupFileExtension = "backup";
-          }
-        ];
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.finn = import ./home.nix;
+              home-manager.backupFileExtension = "backup";
+            }
+          ];
+        };
       };
     };
 }

@@ -98,5 +98,6 @@ in
     shfmt
     signal-desktop
     sops
+    thunderbird
   ];
 }
