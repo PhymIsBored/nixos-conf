@@ -2,6 +2,9 @@
 {
   services.syncthing = {
     enable = true;
+    user = "finn";
+    dataDir = "/home/finn";
+    configDir = "/home/finn/.config/syncthing";
     openDefaultPorts = false; # not sure what this does
     guiPasswordFile = config.sops.secrets."syncthing-pwd".path;
     #guiAddress = "localhost:8384";
