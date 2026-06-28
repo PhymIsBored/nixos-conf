@@ -84,6 +84,7 @@ in
     calibre
     gcc
     julia
+    libjxl
     naps2
     neovim
     nil

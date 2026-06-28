@@ -32,6 +32,7 @@
       };
       "finnsWlan5G/psk" = { };
       "finnsHotspot/psk" = { };
+      "syncthing-pwd" = { };
     };
   };
 }
