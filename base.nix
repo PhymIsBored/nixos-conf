@@ -112,6 +112,7 @@
 
   environment.systemPackages = with pkgs; [
     alacritty
+    direnv
     git
     htop
     keepassxc

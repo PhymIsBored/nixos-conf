@@ -8,13 +8,21 @@ export PAGER=less
 bind 'TAB:menu-complete'
 # bind -s 'set completion-ignore-case on'
 
-alias vim='nvim'
-alias ls='ls --color=auto -hF'
+alias ...='cd ../..'
+alias ..='cd ..'
+alias cp='cp --reflink=auto'
+alias diff='git diff --no-index --exit-code'
+alias du='du -sh'
+alias env='env|sort'
+alias free='free --human'
+
+alias l.='ls -d .*'
 alias la='ls -A'
 alias ll='ls -lA'
-alias l.='ls -d .*'
+alias ls='ls --color=auto -hF'
+
 alias mvim='nvim -M'
-alias wow='echo "yay it worked'
+alias vim='nvim'
 
 # Colors for command-substitution prompt output.
 # \001 and \002 tell readline these sequences are non-printing.
