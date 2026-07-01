@@ -9,6 +9,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/nvidia.nix
+    ../../modules/wifi_iwd.nix
   ];
 
   networking.hostName = "desknix"; # Define your hostname.
