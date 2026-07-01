@@ -85,6 +85,7 @@ in
     gcc
     julia
     libjxl
+    libreoffice
     naps2
     neovim
     nil
