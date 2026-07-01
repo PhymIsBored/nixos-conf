@@ -21,13 +21,50 @@
         "type": "github"
       }
     },
+    "ik-llama": {
+      "inputs": {
+        "ik-llama-src": "ik-llama-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782911360,
+        "narHash": "sha256-IG7qGBj1/0CGB4BFM5Cb19glmLKNMBP9X4J2DQ1LQXw=",
+        "ref": "refs/heads/main",
+        "rev": "c073fc758f2369617c05afb95a2690045d1afc27",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://codeberg.org/Phym/nixos_flake-ik_llama_cpp"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/Phym/nixos_flake-ik_llama_cpp"
+      }
+    },
+    "ik-llama-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782802973,
+        "narHash": "sha256-T8ffglxlZ3nNPBrYPNT2pjPq4+T3BXXAWy55vJUG5lE=",
+        "owner": "ikawrakow",
+        "repo": "ik_llama.cpp",
+        "rev": "29431b31c89e79c10f8736e8f2742485ba1713d6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ikawrakow",
+        "repo": "ik_llama.cpp",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1782691344,
-        "narHash": "sha256-UKS8lypnW5OOIWc3/Qe27/SeO/MsVhiQ0FVUClLZMiA=",
-        "rev": "1f01958ffb5b3545c96d9ef2f4e24c5e5e1eb846",
+        "lastModified": 1782847225,
+        "narHash": "sha256-Q80uZ1R+Y0g0kNfzGG8AcbvNkgYlnwJ3ubunAuIDUIQ=",
+        "rev": "95ca1e203c0750115fd4a6f17d5a245dfe6b1edd",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.3705.1f01958ffb5b/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.3869.95ca1e203c07/nixexprs.tar.xz"
       },
       "original": {
         "id": "nixpkgs",
@@ -38,6 +75,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "ik-llama": "ik-llama",
         "nixpkgs": "nixpkgs",
         "sops-nix": "sops-nix"
       }

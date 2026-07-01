@@ -8,6 +8,9 @@
 
     sops-nix.url = "github:mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    ik-llama.url = "git+https://codeberg.org/Phym/nixos_flake-ik_llama_cpp";
+    ik-llama.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -15,6 +18,7 @@
       nixpkgs,
       home-manager,
       sops-nix,
+      ik-llama,
       ...
     }:
     {
@@ -41,6 +45,9 @@
             ./base.nix
             ./hosts/desktop/desktop.nix
             sops-nix.nixosModules.sops
+            {
+              environment.systemPackages = [ ik-llama.packages.x86_64-linux.default ];
+            }
 
             home-manager.nixosModules.home-manager
             {
