@@ -1,5 +1,6 @@
 keys:
-  - &personal age1sxluvsegl5a5f7mv2pnh2y9rqym8tdhdgrwwygz0yk2wljjmlpqs9y9cq2 # from public key
+  - &personal age1sxluvsegl5a5f7mv2pnh2y9rqym8tdhdgrwwygz0yk2wljjmlpqs9y9cq2 
+  - &desknix age1c2yjs0zk7uwpqmc7hw8vrd07ev8zweq95wd0hct4te80v4j2cdxqkqhmny
 creation_rules:
   # binary files
   - path_regex: secrets/[^/]+\.(bin|key|pem|crt|der|p12|pfx|gpg|asc)$
@@ -8,9 +9,11 @@ creation_rules:
     key_groups:
       - age:
           - *personal
+          - *desknix
 
   # supported file types
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini|sops)$
     key_groups:
       - age:
           - *personal
+          - *desknix
