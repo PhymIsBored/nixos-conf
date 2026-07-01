@@ -40,4 +40,7 @@ creation_rules:
 ```
 
 5. reencrypt the secrets
+```bash
+find ~/nixos-conf/secrets/ -type f -exec sh -c 'sops -d -i "$1" && sops -e -i "$1"' _ {} \;
+```
 
