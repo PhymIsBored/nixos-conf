@@ -68,12 +68,12 @@ in
     package = pkgs.vscode.fhs; # Allow vscode to manage itself, for settigns sync
   };
 
-  xdg.configFile."qtile" = {
-    source = create_symlink "${dotfiles}/qtile/";
-    recursive = true;
-  };
   xdg.configFile."nvim" = {
     source = create_symlink "${dotfiles}/nvim/";
+    recursive = true;
+  };
+  xdg.configFile."alacritty" = {
+    source = create_symlink "${dotfiles}/alacritty/";
     recursive = true;
   };
 
