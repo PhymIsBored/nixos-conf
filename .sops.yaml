@@ -1,5 +1,5 @@
 keys:
-  - &personal age1sxluvsegl5a5f7mv2pnh2y9rqym8tdhdgrwwygz0yk2wljjmlpqs9y9cq2 
+  - &lapnix age1sxluvsegl5a5f7mv2pnh2y9rqym8tdhdgrwwygz0yk2wljjmlpqs9y9cq2 
   - &desknix age1c2yjs0zk7uwpqmc7hw8vrd07ev8zweq95wd0hct4te80v4j2cdxqkqhmny
 creation_rules:
   # binary files
@@ -8,12 +8,12 @@ creation_rules:
     output_type: binary
     key_groups:
       - age:
-          - *personal
+          - *lapnix
           - *desknix
 
   # supported file types
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini|sops)$
     key_groups:
       - age:
-          - *personal
+          - *lapnix
           - *desknix
