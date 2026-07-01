@@ -20,6 +20,7 @@
   networking.hostName = "lapnix"; # Define your hostname.
 
   environment.systemPackages = with pkgs; [
+    asusctl
     bluetui
   ];
 

@@ -79,13 +79,13 @@ in
 
   home.packages = with pkgs; [
     anki
-    asusctl
     btop
     calibre
     gcc
     julia
     libjxl
     libreoffice
+    mpv
     naps2
     neovim
     nil
