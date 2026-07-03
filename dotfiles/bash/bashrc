@@ -4,6 +4,8 @@ export MANPAGER='nvim +Man!'
 export EDITOR=nvim
 export PAGER=less
 
+umask 077 # block those file-permissions per default
+
 # Command completion
 bind 'TAB:menu-complete'
 # bind -s 'set completion-ignore-case on'
