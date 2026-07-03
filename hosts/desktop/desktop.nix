@@ -10,22 +10,12 @@
     ./hardware-configuration.nix
     ../../modules/nvidia.nix
     ../../modules/wifi_iwd.nix
+    ../../modules/steam.nix
   ];
 
   networking.hostName = "desknix"; # Define your hostname.
 
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true;
-  };
-  programs.gamemode = {
-    enable = true;
-    enableRenice = true;
-  };
   environment.systemPackages = with pkgs; [
-    gamescope
-    protontricks
-    protonup-qt
     nvtopPackages.nvidia
   ];
 
