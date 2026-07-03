@@ -81,7 +81,7 @@ in
     anki
     btop
     calibre
-    discord
+    #discord  # krisp noise suppression needs patches, workaround: browser
     gcc
     julia
     libjxl
