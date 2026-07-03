@@ -81,6 +81,7 @@ in
     anki
     btop
     calibre
+    discord
     gcc
     julia
     libjxl
