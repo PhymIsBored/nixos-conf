@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782915506,
-        "narHash": "sha256-GsnQUGU/deWqwSiFOgQ1w9sZzj3S3ar8QJWn8ho7Bco=",
+        "lastModified": 1783114588,
+        "narHash": "sha256-kYYO7YMdOhs7e5vrcxUBg9Y+3Ew087d6jLYVaATnAPA=",
         "ref": "refs/heads/main",
-        "rev": "3cfed91de21068efc4023d78d3c637fa5a8e09be",
-        "revCount": 2,
+        "rev": "fc286ebbb74158440027fa237ecf23c44933bb7a",
+        "revCount": 4,
         "type": "git",
         "url": "https://codeberg.org/Phym/nixos_flake-ik_llama_cpp"
       },
@@ -45,11 +45,11 @@
     "ik-llama-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1782802973,
-        "narHash": "sha256-T8ffglxlZ3nNPBrYPNT2pjPq4+T3BXXAWy55vJUG5lE=",
+        "lastModified": 1783096820,
+        "narHash": "sha256-Fk0TtEWszEBANscgmYbV4LW/+CSz4ctQEZ+Kbgeisw4=",
         "owner": "ikawrakow",
         "repo": "ik_llama.cpp",
-        "rev": "29431b31c89e79c10f8736e8f2742485ba1713d6",
+        "rev": "bbc7de475178dd0535c16ad85f204a2529806c9d",
         "type": "github"
       },
       "original": {
