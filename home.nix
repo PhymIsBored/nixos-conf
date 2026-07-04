@@ -12,6 +12,29 @@ in
   home.homeDirectory = "/home/finn";
   home.stateVersion = "26.05";
 
+  ## programs ###################################################################
+  programs.anki = {
+    enable = true;
+    language = "en_US";
+    theme = "dark";
+    addons = with pkgs.ankiAddons; [
+      review-heatmap
+      fsrs4anki-helper
+      image-occlusion-enhanced
+      # (pkgs.anki-utils.buildAnkiAddon (finalAttrs: {
+      #   pname = "kanji-colorizer";
+      #   version = "0.10";
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "cayennes";
+      #     repo = "kanji-colorize";
+      #     rev = "1cb34055cd1be470de3be365cf15d3e404762acd";
+      #     hash = "sha256-QHBhhr5J6Nu08AaH2TnLzVYEQuaWhedVEfN+UUrbGHU=";
+      #   };
+      #   sourceRoot = "${finalAttrs.src.name}/";
+      # }))
+    ];
+  };
+
   programs.bash = {
     enable = true;
     initExtra = builtins.readFile ./dotfiles/bash/bashrc;
@@ -20,12 +43,6 @@ in
     };
   };
 
-  programs.git = {
-    enable = true;
-    settings = {
-      core.pager = "less -R";
-    };
-  };
   programs.firefox = {
     enable = true;
     profiles.default = {
@@ -63,10 +80,19 @@ in
     };
   };
 
+  programs.git = {
+    enable = true;
+    settings = {
+      core.pager = "less -R";
+    };
+  };
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscode.fhs; # Allow vscode to manage itself, for settigns sync
   };
+
+  ## config files ###############################################################
 
   xdg.configFile."nvim" = {
     source = create_symlink "${dotfiles}/nvim/";
@@ -77,8 +103,8 @@ in
     recursive = true;
   };
 
+  ## packages ###################################################################
   home.packages = with pkgs; [
-    anki
     btop
     calibre
     #discord  # krisp noise suppression needs patches, workaround: browser
