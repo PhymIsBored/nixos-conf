@@ -10,7 +10,7 @@
     ./hardware-configuration.nix
     #../../modules/wifi_wpa.nix
     ../../modules/wifi_iwd.nix
-    ../../modules/additional.nix
+    ../../modules/syncthing.nix
   ];
 
   boot.kernelModules = [ "pkcs8_key_parser" ];
