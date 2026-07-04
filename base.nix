@@ -70,8 +70,6 @@
 
   console.keyMap = "de-latin1-nodeadkeys";
   environment.variables = {
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
     XMODIFIERS = "@im=fcitx";
   };
 
