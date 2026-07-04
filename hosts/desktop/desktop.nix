@@ -15,9 +15,7 @@
   ];
 
   networking.hostName = "desknix"; # Define your hostname.
-  networking.nftables.enable = true;
   networking.firewall = {
-    enable = true;
     allowedTCPPorts = [ 8080 ];
   };
 

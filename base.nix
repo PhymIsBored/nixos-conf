@@ -35,6 +35,12 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = with pkgs; [ networkmanager-openvpn ];
 
+  # firewall
+  networking.nftables.enable = true;
+  networking.firewall = {
+    enable = true;
+  };
+
   ## locale ###################################################################
   time.timeZone = "Europe/Berlin";
 
