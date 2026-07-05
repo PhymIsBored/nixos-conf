@@ -1,4 +1,4 @@
-  {
+{
   sops = {
     defaultSopsFile = ./secrets/secrets.yaml;
     defaultSopsFormat = "yaml";
@@ -32,6 +32,7 @@
       };
       "finnsWlan5G/psk" = { };
       "finnsHotspot/psk" = { };
+      "Unifi/psk" = { };
       "syncthing-pwd" = { };
     };
   };

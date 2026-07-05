@@ -96,6 +96,33 @@
     mode = "0600";
   };
 
+  sops.templates."Unifi" = {
+    content = ''
+      [connection]
+      id=Unifi
+      type=wifi
+
+      [wifi]
+      mode=infrastructure
+      ssid=Unifi
+
+      [wifi-security]
+      key-mgmt=wpa-psk
+      psk=${config.sops.placeholder."Unifi/psk"}
+
+      [ipv4]
+      method=auto
+
+      [ipv6]
+      addr-gen-mode=stable-privacy
+      method=auto
+
+      [proxy]
+    '';
+    path = "/etc/NetworkManager/system-connections/finnsHotspot.nmconnection";
+    mode = "0600";
+  };
+
   sops.templates."irb-vpn" = {
     content = ''
       [connection]
