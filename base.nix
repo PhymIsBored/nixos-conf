@@ -124,6 +124,7 @@
     less
     neovim
     openssl
+    unzip
     vim
     wget
   ];
