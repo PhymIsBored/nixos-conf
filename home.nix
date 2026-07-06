@@ -115,6 +115,7 @@ in
     calibre
     #discord  # krisp noise suppression needs patches, workaround: browser
     gcc
+    jellyfin-desktop
     julia
     libjxl
     libreoffice
