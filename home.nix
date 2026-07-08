@@ -131,6 +131,7 @@ in
     nodejs
     obsidian
     openvpn3
+    pdfarranger
     python3
     ripgrep
     shellcheck
