@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783222121,
-        "narHash": "sha256-E/ElL373TO8lQ2aMvYyzN+k4xkVaUGoRqoa8AtM71tI=",
+        "lastModified": 1783479733,
+        "narHash": "sha256-d/JatqgG+Pmo+IuCTZfnrEAPWU3fdha48GQeXuFO+bE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a1645f40777620c4bd2b6d854b290c2fc354a266",
+        "rev": "cee3f0e7fec85d80c149c7afc29926747f7bd3c2",
         "type": "github"
       },
       "original": {
@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783114588,
-        "narHash": "sha256-kYYO7YMdOhs7e5vrcxUBg9Y+3Ew087d6jLYVaATnAPA=",
+        "lastModified": 1783330702,
+        "narHash": "sha256-+UNZ3NMXzBGWJCsnVDhZl2GH9nGD6L1tHQ/UOUQCZLA=",
         "ref": "refs/heads/main",
-        "rev": "fc286ebbb74158440027fa237ecf23c44933bb7a",
-        "revCount": 4,
+        "rev": "de9b72893fe3079ef30a5636d89ccad81564585f",
+        "revCount": 5,
         "type": "git",
         "url": "https://codeberg.org/Phym/nixos_flake-ik_llama_cpp"
       },
@@ -45,11 +45,11 @@
     "ik-llama-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1783096820,
-        "narHash": "sha256-Fk0TtEWszEBANscgmYbV4LW/+CSz4ctQEZ+Kbgeisw4=",
+        "lastModified": 1783329354,
+        "narHash": "sha256-8eThQJwlhs5WePhk9bifDVRNOQ+xacACEZTHQbhFCLU=",
         "owner": "ikawrakow",
         "repo": "ik_llama.cpp",
-        "rev": "bbc7de475178dd0535c16ad85f204a2529806c9d",
+        "rev": "4130ecc0289b74b08e2817b3b1851a01247d5b90",
         "type": "github"
       },
       "original": {

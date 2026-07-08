@@ -111,10 +111,13 @@ in
 
   ## packages ###################################################################
   home.packages = with pkgs; [
+    audacity
     btop
     calibre
-    #discord  # krisp noise suppression needs patches, workaround: browser
+    densify  # wrapper around ghostscript
     gcc
+    ghostscript
+    gimp
     jellyfin-desktop
     julia
     libjxl

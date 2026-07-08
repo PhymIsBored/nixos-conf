@@ -14,13 +14,17 @@
     ../../modules/syncthing.nix
   ];
 
-  networking.hostName = "desknix"; # Define your hostname.
+  networking.hostName = "desknix";
   networking.firewall = {
-    allowedTCPPorts = [ 8080 ];
+    allowedTCPPorts = [
+      1234  # lmstudio
+    ];
   };
 
   environment.systemPackages = with pkgs; [
+    lmstudio
     nvtopPackages.nvidia
+    opencode
   ];
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
