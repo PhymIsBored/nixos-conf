@@ -8,6 +8,7 @@
 {
   imports = [
     ./sops.nix
+    ./modules/netbird.nix
   ];
 
   ## nix ######################################################################
@@ -40,6 +41,8 @@
   networking.firewall = {
     enable = true;
   };
+
+  services.resolved.enable = true;
 
   ## locale ###################################################################
   time.timeZone = "Europe/Berlin";
@@ -121,6 +124,7 @@
     git
     htop
     keepassxc
+    ldns
     less
     neovim
     openssl
