@@ -6,6 +6,11 @@
 let
   dotfiles = "${config.home.homeDirectory}/nixos-conf/dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  configs = {
+    alacritty = "alacritty";
+    nvim = "nvim";
+    opencode = "opencode";
+  };
 in
 {
   home.username = "finn";
@@ -100,21 +105,17 @@ in
 
   ## config files ###############################################################
 
-  xdg.configFile."nvim" = {
-    source = create_symlink "${dotfiles}/nvim/";
+  xdg.configFile = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/${subpath}";
     recursive = true;
-  };
-  xdg.configFile."alacritty" = {
-    source = create_symlink "${dotfiles}/alacritty/";
-    recursive = true;
-  };
+  }) configs;
 
   ## packages ###################################################################
   home.packages = with pkgs; [
     audacity
     btop
     calibre
-    densify  # wrapper around ghostscript
+    densify # wrapper around ghostscript
     gcc
     ghostscript
     gimp
