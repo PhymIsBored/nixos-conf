@@ -131,6 +131,7 @@ in
     nixpkgs-fmt
     nodejs
     obsidian
+    opencode
     openvpn3
     pdfarranger
     python3

@@ -22,6 +22,7 @@
       "curl *": "allow",
       "date": "allow",
       "df *": "allow",
+      "diff *": "allow",
       "dig *": "allow",
       "du *": "allow",
       "echo *": "allow",

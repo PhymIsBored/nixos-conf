@@ -24,7 +24,6 @@
   environment.systemPackages = with pkgs; [
     lmstudio
     nvtopPackages.nvidia
-    opencode
   ];
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
