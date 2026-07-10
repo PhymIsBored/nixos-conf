@@ -12,6 +12,7 @@
     ../../modules/wifi_iwd.nix
     ../../modules/steam.nix
     ../../modules/syncthing.nix
+    ../../modules/docker.nix
   ];
 
   networking.hostName = "desknix";
