@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "enabled_providers": ["lmstudio"],
+  "enabled_providers": ["lmstudio", "openrouter", "openai"],
   "provider": {
     "lmstudio": {
       "npm": "@ai-sdk/openai-compatible",
@@ -94,9 +94,28 @@
       "xargs *": "allow",
       "xz *": "allow",
       "yes *": "allow",
-      "zip *": "allow"
+      "zip *": "allow",
+      "docker info": "allow",
+      "docker version": "allow",
+      "docker ps *": "allow",
+      "docker images *": "allow",
+      "docker logs *": "allow",
+      "docker inspect *": "allow",
+      "docker network ls": "allow",
+      "docker volume ls": "allow",
+      "docker stats *": "allow",
+      "docker top *": "allow",
+      "docker port *": "allow",
+      "docker events": "allow",
+      "docker config ls": "allow",
+      "docker secret ls": "allow",
+      "docker service ls": "allow",
+      "docker node ls": "allow",
+      "docker plugin ls": "allow",
+      "docker buildx ls": "allow",
+      "docker context ls": "allow"
     },
-    "task": "ask",
+    "task": "allow",
     "external_directory": {
       "~/": "allow"
     },
@@ -105,7 +124,7 @@
       "*.env": "deny",
       "*.env.*": "deny"
     },
-    "edit": "ask",
+    "edit": "allow",
     "websearch": "allow"
   }
 }
