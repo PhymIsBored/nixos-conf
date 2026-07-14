@@ -19,6 +19,13 @@
 
   networking.hostName = "lapnix"; # Define your hostname.
 
+  # for EML lab
+  users.users."finn".extraGroups = [ "dialout" ];
+  services.udev.extraRules = ''
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", MODE="666", GROUP="dialout"
+  '';
+
+
   services.asusd = {
     enable = true;
     asusdConfig.text = ''
