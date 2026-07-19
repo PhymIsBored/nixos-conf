@@ -1,3 +1,5 @@
+Now at [codeberg](https://codeberg.org/phym/nixos-conf).
+---
 # Setup Sops-nix
 
 1. Generate ssh keys (without passphrase)
