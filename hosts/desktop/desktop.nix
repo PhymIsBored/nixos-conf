@@ -23,15 +23,16 @@
   };
 
   programs.coolercontrol.enable = true;
-  boot.kernelModules = [ "nct6683" "nct6687d" ]; # ASROCK B850 livemixer wifi fan control chip
-  boot.extraModulePackages = [ pkgs.linuxPackages.nct6687d ];
+  boot.kernelModules = [ "nct6687" ]; # ASROCK B850 livemixer wifi fan control chip
+  boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
+  # The NCT6686D I/O range is reserved by the board's ACPI firmware.
+  boot.kernelParams = [ "acpi_enforce_resources=lax" ];
 
   environment.systemPackages = with pkgs; [
     liquidctl
     lm_sensors
     lmstudio
     nvtopPackages.nvidia
-    linuxPackages_latest.nct6687d
   ];
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
