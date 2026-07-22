@@ -98,6 +98,21 @@ in
     };
   };
 
+  programs.vesktop = {
+    enable = true;
+
+    vencord.settings = {
+      autoUpdate = true;
+      autoUpdateNotification = true;
+      notifyAboutUpdates = true;
+
+      plugins = {
+        ClearURLs.enabled = true;
+        FixYoutubeEmbeds.enabled = true;
+      };
+    };
+  };
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscode.fhs; # Allow vscode to manage itself, for settigns sync
