@@ -27,6 +27,10 @@ alias ls='ls --color=auto -hF'
 alias mvim='nvim -M'
 alias vim='nvim'
 
+alias gdiff='git diff --patience --find-renames \
+    --color-moved=zebra \
+    --color-moved-ws=allow-indentation-change'
+
 # Colors for command-substitution prompt output.
 # \001 and \002 tell readline these sequences are non-printing.
 readonly cyan=$'\001\e[36m\002'
