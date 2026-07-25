@@ -8,11 +8,12 @@
 {
   imports = [
     ./hardware-configuration.nix
-    #../../modules/wifi_wpa.nix
     ../../modules/wifi_iwd.nix
     ../../modules/syncthing.nix
+    ../../modules/steam.nix
   ];
 
+  # required for iwd reading .pem certificates
   boot.kernelModules = [ "pkcs8_key_parser" ];
 
   hardware.bluetooth.enable = true;
@@ -24,7 +25,6 @@
   services.udev.extraRules = ''
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", MODE="666", GROUP="dialout"
   '';
-
 
   services.asusd = {
     enable = true;
@@ -59,7 +59,6 @@
   environment.systemPackages = with pkgs; [
     asusctl
     bluetui
-    lmstudio
   ];
 
 }
