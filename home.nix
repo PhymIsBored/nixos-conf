@@ -128,6 +128,7 @@ in
   ## packages ###################################################################
   home.packages = with pkgs; [
     audacity
+    brave
     btop
     calibre
     densify # wrapper around ghostscript
