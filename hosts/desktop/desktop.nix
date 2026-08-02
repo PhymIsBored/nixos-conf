@@ -18,7 +18,7 @@
   networking.hostName = "desknix";
   networking.firewall = {
     allowedTCPPorts = [
-      1234  # lmstudio
+      1234 # lmstudio
     ];
   };
 
