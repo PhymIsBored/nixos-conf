@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   services.syncthing = {
     enable = true;
@@ -25,5 +25,9 @@
       #};
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    syncthingtray
+  ];
 
 }
