@@ -131,11 +131,13 @@ in
     brave
     btop
     calibre
+    clock-rs
     densify # wrapper around ghostscript
     gcc
     ghostscript
     gimp
     jellyfin-desktop
+    josm
     julia
     libjxl
     libreoffice
