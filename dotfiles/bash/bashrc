@@ -31,6 +31,8 @@ alias gdiff='git diff --patience --find-renames \
     --color-moved=zebra \
     --color-moved-ws=allow-indentation-change'
 
+alias clock='clock-rs'
+
 # Colors for command-substitution prompt output.
 # \001 and \002 tell readline these sequences are non-printing.
 readonly cyan=$'\001\e[36m\002'
