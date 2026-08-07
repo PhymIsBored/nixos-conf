@@ -52,7 +52,6 @@
 
   environment.systemPackages = with pkgs; [
     asusctl
-    bluetui
   ];
 
 }

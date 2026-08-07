@@ -120,10 +120,10 @@
 
   environment.systemPackages = with pkgs; [
     alacritty
+    bluetui
     direnv
     git
     htop
-    keepassxc
     ldns
     less
     neovim
