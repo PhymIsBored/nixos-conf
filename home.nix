@@ -158,6 +158,7 @@ in
     shfmt
     signal-desktop
     sops
+    spotify
     thunderbird
   ];
 }
