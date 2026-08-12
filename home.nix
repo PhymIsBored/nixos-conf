@@ -10,12 +10,20 @@ let
     alacritty = "alacritty";
     nvim = "nvim";
     opencode = "opencode";
+    mpv = "mpv";
   };
 in
 {
   home.username = "finn";
   home.homeDirectory = "/home/finn";
   home.stateVersion = "26.05";
+
+  ## config files ###############################################################
+
+  xdg.configFile = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/${subpath}";
+    recursive = true;
+  }) configs;
 
   ## programs ###################################################################
   programs.anki = {
@@ -118,12 +126,6 @@ in
     package = pkgs.vscode.fhs; # Allow vscode to manage itself, for settigns sync
   };
 
-  ## config files ###############################################################
-
-  xdg.configFile = builtins.mapAttrs (name: subpath: {
-    source = create_symlink "${dotfiles}/${subpath}";
-    recursive = true;
-  }) configs;
 
   ## packages ###################################################################
   home.packages = with pkgs; [
