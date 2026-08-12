@@ -1,3 +1,4 @@
+[list of external inputs](external.md)
 # Setup Sops-nix
 
 1. Generate ssh keys (without passphrase)
