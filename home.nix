@@ -139,6 +139,7 @@ in
     ghostscript
     gimp
     jellyfin-desktop
+    jellyfin-mpv-shim
     josm
     julia
     libjxl
