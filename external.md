@@ -1,4 +1,4 @@
-[back to readme](readme.md)
+[<back to readme](readme.md)
 
 # Flake inputs
 - [nixos-unstable](https://github.com/NixOS/nixpkgs/tree/nixos-unstable)
