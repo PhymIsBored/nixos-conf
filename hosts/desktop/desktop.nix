@@ -28,6 +28,19 @@
     interfaces.enp8s0.wakeOnLan.enable = true;
   };
 
+  services.openssh = {
+    enable = true;
+    openFirewall = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      AllowUsers = [ "finn" ];
+      MaxAuthTries = 3;
+      PerSourcePenalties = "crash:3600s authfail:3600s max:86400s";
+    };
+  };
+
   programs.coolercontrol.enable = true;
   boot.kernelModules = [ "nct6687" ]; # ASROCK B850 livemixer wifi fan control chip
   boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
