@@ -11,4 +11,4 @@
 - [nvim/](https://github.com/tonybanters/nvim)
 - mpv/
   - [uosc](https://github.com/tomasklaen/uosc)
-  - [jellyfin](https://github.com/EmperorPenguin18/mpv-jellyfin/tree/main)
+  - [thumbfast](https://github.com/po5/thumbfast/tree/master)
