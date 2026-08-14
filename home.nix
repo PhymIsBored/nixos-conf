@@ -23,7 +23,13 @@ in
   xdg.configFile = builtins.mapAttrs (name: subpath: {
     source = create_symlink "${dotfiles}/${subpath}";
     recursive = true;
-  }) configs;
+  }) configs // { # use mpv conf for jellyfin-mpv-shim
+    "jellyfin-mpv-shim/mpv.conf".source = create_symlink "${dotfiles}/mpv/mpv.conf";
+    "jellyfin-mpv-shim/input.conf".source = create_symlink "${dotfiles}/mpv/input.conf";
+    "jellyfin-mpv-shim/scripts".source = create_symlink "${dotfiles}/mpv/scripts";
+    "jellyfin-mpv-shim/script-opts".source = create_symlink "${dotfiles}/mpv/script-opts";
+    "jellyfin-mpv-shim/fonts".source = create_symlink "${dotfiles}/mpv/fonts";
+  };
 
   ## programs ###################################################################
   programs.anki = {
@@ -134,6 +140,7 @@ in
     btop
     calibre
     clock-rs
+    darktable
     densify # wrapper around ghostscript
     gcc
     ghostscript
