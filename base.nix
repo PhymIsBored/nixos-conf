@@ -122,6 +122,7 @@
     alacritty
     bluetui
     direnv
+    ffmpeg
     git
     htop
     ldns
