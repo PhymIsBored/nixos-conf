@@ -159,6 +159,7 @@ in
     nixpkgs-fmt
     nodejs
     obsidian
+    openai-whisper
     opencode
     openvpn3
     pdfarranger
