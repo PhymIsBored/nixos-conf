@@ -13,6 +13,7 @@
     ../../modules/steam.nix
     ../../modules/syncthing.nix
     ../../modules/docker.nix
+    ../../modules/netbird.nix
   ];
 
   networking = {
