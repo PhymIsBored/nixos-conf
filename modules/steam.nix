@@ -15,6 +15,8 @@
     enableRenice = true;
   };
   environment.systemPackages = with pkgs; [
+    r2modman
+    mangohud
     protontricks
     protonup-qt
   ];
