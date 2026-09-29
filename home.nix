@@ -145,7 +145,6 @@ in
     gcc
     ghostscript
     gimp
-    jellyfin-desktop
     jellyfin-mpv-shim
     josm
     julia
