@@ -17,8 +17,6 @@
   # required for iwd reading .pem certificates
   boot.kernelModules = [ "pkcs8_key_parser" ];
 
-  hardware.bluetooth.enable = true;
-
   networking.hostName = "lapnix"; # Define your hostname.
 
   services.asusd = {

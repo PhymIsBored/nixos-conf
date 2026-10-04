@@ -104,6 +104,8 @@
     pulse.enable = true;
   };
 
+  hardware.bluetooth.enable = true;
+
   ## user #####################################################################
   users.users."finn" = {
     isNormalUser = true;
