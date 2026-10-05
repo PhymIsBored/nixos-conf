@@ -50,8 +50,7 @@
       id=Finns Wlan_5G
       type=wifi
 
-      [wifi]
-      mode=infrastructure
+      [wifi] mode=infrastructure
       ssid=Finns Wlan_5G
 
       [wifi-security]
@@ -152,11 +151,11 @@
 
       [ipv4]
       method=auto
-      never-default=true
+      never-default=false # set to true to route only partial traffic
 
       [ipv6]
       method=auto
-      never-default=true
+      never-default=false # set to true to route only partial traffic
     '';
     path = "/etc/NetworkManager/system-connections/irb-vpn.nmconnection";
     mode = "0600";
