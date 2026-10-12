@@ -14,6 +14,7 @@
     ../../modules/syncthing.nix
     ../../modules/docker.nix
     ../../modules/netbird.nix
+    ../../modules/faf.nix
   ];
 
   networking = {
@@ -47,6 +48,11 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
   # The NCT6686D I/O range is reserved by the board's ACPI firmware.
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
+
+  programs.faf = {
+    enable = true;
+    directory = "faf-linux";
+  };
 
   environment.systemPackages = with pkgs; [
     liquidctl

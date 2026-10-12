@@ -15,7 +15,7 @@ let
         curl
         jq
         bubblewrap
-        xorg.libXtst
+        libxtst
         gtk3
       ];
   };
