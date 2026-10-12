@@ -126,6 +126,7 @@
     ffmpeg
     git
     htop
+    jq
     ldns
     less
     neovim
