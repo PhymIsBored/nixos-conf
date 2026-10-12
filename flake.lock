@@ -35,27 +35,10 @@
         "type": "indirect"
       }
     },
-    "nixpkgs-openvpn3": {
-      "locked": {
-        "lastModified": 1784054906,
-        "narHash": "sha256-Ma9ObLEKItPnsZX3U2kFxm/PQUa2ATEiqoVHgeMqMe0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "cb7be403c8c89bc290dcb411c8f0e4de854c9feb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "cb7be403c8c89bc290dcb411c8f0e4de854c9feb",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-openvpn3": "nixpkgs-openvpn3",
         "sops-nix": "sops-nix"
       }
     },
