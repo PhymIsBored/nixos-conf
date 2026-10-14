@@ -15,7 +15,6 @@ alias ..='cd ..'
 alias cp='cp --reflink=auto'
 alias diff='git diff --no-index --exit-code'
 alias du='du -sh'
-alias env='env|sort'
 alias free='free --human'
 alias ffind='find . -type f -name'
 
