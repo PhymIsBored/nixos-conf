@@ -15,6 +15,7 @@
     ../../modules/docker.nix
     ../../modules/netbird.nix
     ../../modules/faf.nix
+    ../../modules/beyond-all-reason.nix
   ];
 
   networking = {
@@ -31,8 +32,8 @@
   };
 
   services.openssh = {
-    enable = true;
-    openFirewall = true;
+    enable = false;
+    openFirewall = false;
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
