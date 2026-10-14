@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -13,6 +15,7 @@
   outputs =
     inputs@{
       nixpkgs,
+      nixpkgs-master,
       home-manager,
       sops-nix,
       ...
@@ -21,8 +24,10 @@
       nixosConfigurations = {
         lapnix = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             ./base.nix
+            ./modules/master-overrides.nix
             ./hosts/laptop/laptop.nix
             sops-nix.nixosModules.sops
 
@@ -38,8 +43,10 @@
 
         desknix = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             ./base.nix
+            ./modules/master-overrides.nix
             ./hosts/desktop/desktop.nix
             sops-nix.nixosModules.sops
 
