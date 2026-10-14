@@ -30,6 +30,12 @@
         #group = "wpa_supplicant";
         mode = "0640";
       };
+      "eduroam/upb_vpn_ca.pem" = {
+        sopsFile = ./secrets/upb_vpn_ca.pem;
+        format = "binary";
+        #group = "wpa_supplicant";
+        mode = "0640";
+      };
       "finnsWlan5G/psk" = { };
       "finnsHotspot/psk" = { };
       "Unifi/psk" = { };

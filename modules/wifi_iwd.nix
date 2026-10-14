@@ -133,7 +133,7 @@
       [vpn]
       auth=SHA512
 
-      ca=${config.sops.secrets."eduroam/ca_cert.pem".path}
+      ca=${config.sops.secrets."eduroam/upb_vpn_ca.pem".path}
       cert=${config.sops.secrets."eduroam/client_cert.crt.pem".path}
       key=${config.sops.secrets."eduroam/client_cert.key.pem".path}
 
