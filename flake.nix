@@ -27,7 +27,6 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./base.nix
-            ./modules/master-overrides.nix
             ./hosts/laptop/laptop.nix
             sops-nix.nixosModules.sops
 
@@ -46,7 +45,6 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./base.nix
-            ./modules/master-overrides.nix
             ./hosts/desktop/desktop.nix
             sops-nix.nixosModules.sops
 
