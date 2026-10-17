@@ -137,7 +137,6 @@ in
 
   ## packages ###################################################################
   home.packages = with pkgs; [
-    R
     audacity
     brave
     btop
@@ -167,7 +166,6 @@ in
     pdfarranger
     python3
     ripgrep
-    rstudio
     shellcheck
     shfmt
     signal-desktop
