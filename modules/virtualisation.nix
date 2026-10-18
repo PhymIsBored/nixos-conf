@@ -16,8 +16,18 @@
   # Redirect USB devices into guests using SPICE.
   virtualisation.spiceUSBRedirection.enable = true;
 
-  environment.systemPackages = [
-    pkgs.virt-viewer
+  networking.firewall = {
+    allowedTCPPorts = [
+      53
+    ];
+    allowedUDPPorts = [
+      67
+      53
+    ];
+  };
+
+  environment.systemPackages = with pkgs; [
+    virt-viewer
   ];
 
   users.users.finn.extraGroups = [ "libvirtd" ];
