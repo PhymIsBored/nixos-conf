@@ -11,10 +11,10 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ( modules + /wifi_iwd.nix)
-    ( modules + /syncthing.nix)
-    ( modules + /steam.nix)
-    ( modules + /netbird.nix)
+    (modules + /wifi_iwd.nix)
+    (modules + /syncthing.nix)
+    (modules + /steam.nix)
+    (modules + /netbird.nix)
   ];
 
   # required for iwd reading .pem certificates
