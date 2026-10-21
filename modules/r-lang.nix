@@ -1,13 +1,24 @@
 { pkgs, ... }:
 
-{
-  imports = [
-    ./r-packages.nix
-    #(import ./master-overrides.nix ["rstudio"])
+let
+  extraRPackages = with pkgs.rPackages; [
+    nycflights13
+    palmerpenguins
+    rmarkdown
+    tidyverse
   ];
 
-  environment.systemPackages = with pkgs; [
-    R
-    rstudio
+  RWithPackages = pkgs.rWrapper.override {
+    packages = extraRPackages;
+  };
+
+  RStudioWithPackages = pkgs.rstudioWrapper.override {
+    packages = extraRPackages;
+  };
+in
+{
+  environment.systemPackages = [
+    RWithPackages
+    RStudioWithPackages
   ];
 }
