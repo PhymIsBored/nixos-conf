@@ -163,6 +163,7 @@ in
     openai-whisper
     opencode
     openvpn3
+    pandoc
     pdfarranger
     python3
     ripgrep
