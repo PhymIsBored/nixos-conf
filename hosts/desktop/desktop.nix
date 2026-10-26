@@ -20,6 +20,7 @@ in
     (modules + /faf.nix)
     (modules + /beyond-all-reason.nix)
     (modules + /virtualisation.nix)
+    (modules + /opencode-unit.nix)
   ];
 
   networking = {
