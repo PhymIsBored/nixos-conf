@@ -174,5 +174,6 @@ in
     sops
     spotify
     thunderbird
+    yazi
   ];
 }
