@@ -128,6 +128,7 @@
     git
     htop
     jq
+    kdePackages.partitionmanager
     ldns
     less
     neovim
