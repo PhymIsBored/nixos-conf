@@ -19,7 +19,7 @@ in
     (modules + /netbird.nix)
     (modules + /faf.nix)
     (modules + /beyond-all-reason.nix)
-    (modules + /bar-lobby.nix)
+    (modules + /bar-native.nix)
     (modules + /virtualisation.nix)
     (modules + /opencode-unit.nix)
   ];
@@ -61,7 +61,7 @@ in
     directory = "faf-linux";
   };
 
-  programs.bar-lobby.enable = true;
+  programs.bar-native.enable = true;
 
   environment.systemPackages = with pkgs; [
     liquidctl

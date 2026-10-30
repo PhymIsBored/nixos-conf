@@ -26,24 +26,50 @@ Evaluate both backends on both hosts without activating either:
 nix eval --impure --json --file tests/wifi.nix
 ```
 
-## BAR Lobby
+## BAR Native
 
-The new BAR Lobby is enabled on `desknix`. Launch it with `bar-lobby` or the
-**Beyond All Reason (BAR Lobby)** desktop entry. The existing `bar` command and
-`modules/beyond-all-reason.nix` remain unchanged.
+Launch it with `bar-native` or the
+**Beyond All Reason (Native)** desktop entry. Both the Lobby and its downloaded
+engines run outside FHS, using the host graphics driver without forcing X11 or
+PRIME offload. The existing `bar` and `bar-lobby` launchers remain installed.
 
-To enable it on another host, add the module to that host's `imports` and enable it:
+To enable it on another x86_64-linux host:
 
 ```nix
-imports = [ ../../modules/bar-lobby.nix ];
-programs.bar-lobby.enable = true;
+imports = [ ../../modules/bar-native.nix ];
+programs.bar-native.enable = true;
 ```
 
-Importing the module alone does not install it. Its package uses the host's `pkgs`
-(currently the root flake's `nixos-unstable` input), without a separate Nixpkgs pin
-or an overlay replacing the existing BAR package. The bundled assets require
-unfree packages to be allowed, as they already are in `base.nix`.
+The module and packaging are self-contained under `modules/bar-native.nix` and
+`modules/bar-native/`; they do not depend on `/home/finn/bar/bar-native`. The
+package uses the host's `pkgs`, with no new flake inputs or Nixpkgs pin. The unfree
+assets are covered by the existing policy in `base.nix`.
 
-Update the lobby version and AppImage hash in `modules/bar-lobby/package.nix`, not
-through its in-app updater. `programs.bar-lobby.package` can override the package
-for an individual host.
+Close any other BAR Lobby instance before launching. The native Lobby reuses the
+existing assets under `$XDG_DATA_HOME/BeyondAllReason/assets` (defaulting to
+`~/.local/share/BeyondAllReason/assets`) and state under
+`$XDG_STATE_HOME/BeyondAllReason` (defaulting to `~/.local/state/BeyondAllReason`).
+Set `BAR_STATE_PATH` for separate settings/state and `BAR_ASSETS_PATH` for separate
+content; shared assets remain writable by the Lobby.
+
+`runtime.nix` invokes downloaded engines and `pr-downloader` through Nix's ELF
+loader and library paths, without modifying downloaded binaries. The Lobby's
+`--isolation` flag is retained: it controls engine content directories, not an FHS
+sandbox. `hardware.graphics` is enabled, but the module does not configure the
+GPU driver, enable `nix-ld`, or disable Electron's sandbox.
+
+Update the Lobby version and AppImage hash in `modules/bar-native/package.nix`,
+not through its in-app updater. `programs.bar-native.package` can override the
+package. The build checks the expected upstream child-process imports, so an
+upstream bundle change fails rather than silently bypassing the native runtime.
+
+Validate the adapter and build the enabled package without activating the system:
+
+```bash
+node --test modules/bar-native/tests/native-spawn.test.cjs
+nix build .#nixosConfigurations.desknix.config.programs.bar-native.package --no-link
+```
+
+The original standalone package was tested loading a local skirmish through the
+Lobby on NVIDIA/Wayland. Actual multiplayer, fresh downloads and extended gameplay
+remain untested.
