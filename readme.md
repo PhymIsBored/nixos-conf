@@ -1,4 +1,29 @@
 [list of external inputs>](external.md)
+
+# Wi-Fi backends
+
+Import exactly one Wi-Fi module in the host configuration:
+
+```nix
+imports = [ ../../modules/wifi_iwd.nix ]; # iwd
+# imports = [ ../../modules/wifi_wpa.nix ]; # wpa_supplicant
+```
+
+Both use NetworkManager and import `modules/networkmanager-profiles.nix` for the
+same SOPS-managed Wi-Fi and VPN profiles. NetworkManager and its OpenVPN plugin
+are enabled in `base.nix`; the secrets are declared in `sops.nix`.
+
+The iwd module also installs its native profiles and loads `pkcs8_key_parser` for
+eduroam. The WPA module selects NetworkManager's `wpa_supplicant` backend and gives
+the hardened service read access to the eduroam PEM certificates and private key.
+No host-specific settings need changing when switching the import.
+
+Evaluate both backends on both hosts without activating either:
+
+```bash
+nix eval --impure --json --file tests/wifi.nix
+```
+
 # Setup Sops-nix
 
 1. Generate ssh keys (without passphrase)
