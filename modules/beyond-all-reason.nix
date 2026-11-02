@@ -1,14 +1,17 @@
 { pkgs, ... }:
 
+let
+  beyondAllReason = pkgs.callPackage ./beyond-all-reason/package.nix { };
+in
 {
-  environment.systemPackages = [
-    (pkgs.writeShellScriptBin "bar" ''
-      exec ${pkgs.coreutils}/bin/env \
-        SDL_VIDEODRIVER=x11 \
-        __NV_PRIME_RENDER_OFFLOAD=1 \
-        __GLX_VENDOR_LIBRARY_NAME=nvidia \
-        ${pkgs.beyond-all-reason}/bin/beyond-all-reason \
-        --ozone-platform=x11 "$@"
-    '')
+  hardware.graphics.enable = true;
+
+  assertions = [
+    {
+      assertion = pkgs.stdenv.hostPlatform.system == "x86_64-linux";
+      message = "The native Beyond All Reason package requires x86_64-linux (the upstream Linux release architecture).";
+    }
   ];
+
+  environment.systemPackages = [ beyondAllReason ];
 }
