@@ -1,5 +1,6 @@
 {
   config,
+  osConfig,
   pkgs,
   ...
 }:
@@ -43,18 +44,48 @@ in
       review-heatmap
       fsrs4anki-helper
       image-occlusion-enhanced
-      # (pkgs.anki-utils.buildAnkiAddon (finalAttrs: {
-      #   pname = "kanji-colorizer";
-      #   version = "0.10";
-      #   src = pkgs.fetchFromGitHub {
-      #     owner = "cayennes";
-      #     repo = "kanji-colorize";
-      #     rev = "1cb34055cd1be470de3be365cf15d3e404762acd";
-      #     hash = "sha256-QHBhhr5J6Nu08AaH2TnLzVYEQuaWhedVEfN+UUrbGHU=";
-      #   };
-      #   sourceRoot = "${finalAttrs.src.name}/";
-      # }))
+      (pkgs.anki-utils.buildAnkiAddon (finalAttrs: {
+        pname = "kanji-colorizer";
+        # To update: pin src.rev to the latest main commit at
+        # https://github.com/cayennes/kanji-colorize and update version's date
+        # (and upstream version from pavement.py, if changed). Set src.hash to
+        # pkgs.lib.fakeHash, rebuild, then replace it with the reported "got" hash.
+        # Also check kanjicolorizer/data/kanjivg at that commit: if its submodule
+        # revision changed, update kanjiVG.rev and regenerate its hash the same way.
+        # Rebuild with: nix build --no-link .#nixosConfigurations.lapnix.config.home-manager.users.finn.home.activationPackage
+        version = "0.12-unstable-2026-07-30";
+        src = pkgs.fetchFromGitHub {
+          owner = "cayennes";
+          repo = "kanji-colorize";
+          rev = "f0a65bc8d7826f3485909d08fa65a9d280d08400";
+          hash = "sha256-YxKMPn0+MZKKz0KHJLPHJQxYsIajYpuzwgWEUaHZt9I=";
+        };
+        # Fetch the pinned submodule over HTTPS (upstream uses an SSH URL).
+        kanjiVG = pkgs.fetchFromGitHub {
+          owner = "KanjiVG";
+          repo = "kanjivg";
+          rev = "93934ee1e4a0e37cda6f19ac111208d5327b1d9e";
+          hash = "sha256-hJbaXHsoxkXDuoRQHzCDhXycCyqhyVRh5WZe4eMgUd0=";
+        };
+        sourceRoot = "${finalAttrs.src.name}/anki";
+        # Upstream's release bundles the library and its KanjiVG submodule
+        # alongside the Anki entry point; neither is in anki/ itself.
+        postUnpack = ''
+          cp -r "$sourceRoot/../kanjicolorizer" "$sourceRoot/kanjicolorizer"
+          chmod -R u+w "$sourceRoot/kanjicolorizer"
+          mkdir -p "$sourceRoot/kanjicolorizer/data/kanjivg"
+          cp -r "$kanjiVG/kanji" "$sourceRoot/kanjicolorizer/data/kanjivg/kanji"
+          cp -r "$sourceRoot/../licenses" "$sourceRoot/kanjicolorizer/licenses"
+          chmod -R u+w "$sourceRoot/kanjicolorizer"
+        '';
+      }))
     ];
+    profiles."finn".sync = {
+      # Keep the sync username and key outside Anki's Home Manager-managed,
+      # read-only prefs21.db. The sync key is a token, NOT the account password.
+      usernameFile = osConfig.sops.secrets."anki/username".path;
+      keyFile = osConfig.sops.secrets."anki/sync-key".path;
+    };
   };
 
   programs.bash = {

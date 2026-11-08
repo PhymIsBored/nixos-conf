@@ -40,6 +40,14 @@
       "finnsHotspot/psk" = { };
       "Unifi/psk" = { };
       "syncthing-pwd" = { };
+      "anki/username" = {
+        owner = "finn";
+        mode = "0400";
+      };
+      "anki/sync-key" = {
+        owner = "finn";
+        mode = "0400";
+      };
     };
   };
 }
