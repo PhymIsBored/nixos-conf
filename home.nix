@@ -138,13 +138,12 @@ in
   ## packages ###################################################################
   home.packages = with pkgs; [
     audacity
-    brave
     btop
     calibre
+    chromium
     clock-rs
     darktable
     densify # wrapper around ghostscript
-    euro-office-desktopeditors
     gcc
     ghostscript
     gimp
