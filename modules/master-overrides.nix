@@ -1,4 +1,5 @@
 packages:
+{ addToSystemPackages ? true }:
 {
   inputs,
   pkgs,
@@ -23,5 +24,7 @@ in
     )
   ];
 
-  environment.systemPackages = map (path: lib.getAttrFromPath path pkgs) paths;
+  environment.systemPackages = lib.optionals addToSystemPackages (
+    map (path: lib.getAttrFromPath path pkgs) paths
+  );
 }

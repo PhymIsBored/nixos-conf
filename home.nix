@@ -38,6 +38,7 @@ in
   ## programs ###################################################################
   programs.anki = {
     enable = true;
+    package = pkgs.anki;
     language = "en_US";
     theme = "dark";
     addons = with pkgs.ankiAddons; [
