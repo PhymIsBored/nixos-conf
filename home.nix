@@ -175,6 +175,7 @@ in
     clock-rs
     darktable
     densify # wrapper around ghostscript
+    euro-office-desktopeditors
     gcc
     ghostscript
     gimp
