@@ -143,7 +143,25 @@
     nerd-fonts.jetbrains-mono
     noto-fonts
     noto-fonts-cjk-sans
+    noto-fonts-cjk-serif
   ];
+
+  # Prefer Japanese glyph forms when falling back to CJK fonts.
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [
+      "Noto Sans"
+      "Noto Sans CJK JP"
+    ];
+    serif = [
+      "Noto Serif"
+      "Noto Serif CJK JP"
+    ];
+    monospace = [
+      "Hack"
+      "Noto Sans Mono"
+      "Noto Sans Mono CJK JP"
+    ];
+  };
 
   system.stateVersion = "26.05";
 
