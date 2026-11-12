@@ -21,11 +21,20 @@
         "baseURL": "https://ai-gateway.uni-paderborn.de/v1"
       },
       "models": {
+        "anthropic.claude-opus-5-5": {
+          "name": "Claude Opus 5.5"
+        },
+        "anthropic.claude-haiku-5-5": {
+          "name": "Claude Haiku 5.5"
+        },
         "openai.gpt-6-astra": {
           "name": "OpenAI GPT 6 Astra"
         },
         "openai.gpt-6.1-sol": {
           "name": "OpenAI GPT 6.1 Sol"
+        },
+        "openai.gpt-6.1-terra": {
+          "name": "OpenAI GPT 6.1 Terra"
         },
         "openai.gpt-6-luna": {
           "name": "OpenAI GPT 6 Luna"
@@ -36,9 +45,15 @@
         "gwdg.glm-5.3-flash": {
           "name": "GWDG GLM 5.3 Flash"
         },
-        "gwdg.deepseek-v4-flash-0731": {
-          "name": "GWDG Deepseek V4 FLash"
-        }
+        "gwdg.glm-5.3": {
+          "name": "GWDG GLM 5.3"
+        },   
+        "gwdg.mistral-large-4-1t-a52b": {
+          "name": "Mistral Large 4"
+        },
+        "gwdg.deepseek-v4.1-flash-1017": {
+          "name": "DeepSeek v4.1-flash"
+        }   
       }
     }
   },
