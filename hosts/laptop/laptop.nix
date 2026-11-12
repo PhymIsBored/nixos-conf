@@ -4,17 +4,13 @@
   lib,
   ...
 }:
-
-let
-  modules = ../../modules;
-in
 {
   imports = [
     ./hardware-configuration.nix
-    (modules + /wifi_iwd.nix)
-    (modules + /syncthing.nix)
-    (modules + /steam.nix)
-    (modules + /netbird.nix)
+    ../../modules/wifi_iwd.nix
+    ../../modules/syncthing.nix
+    ../../modules/steam.nix
+    ../../modules/netbird.nix
   ];
 
   networking.hostName = "lapnix"; # Define your hostname.
