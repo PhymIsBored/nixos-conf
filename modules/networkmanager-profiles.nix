@@ -142,11 +142,14 @@
 
       [ipv4]
       method=auto
-      never-default=false # set to true to route only partial traffic
+      # Route the university's IPv4 network through the VPN, not all traffic.
+      route1=131.234.0.0/16
+      never-default=true
 
       [ipv6]
       method=auto
-      never-default=false # set to true to route only partial traffic
+      # The VPN supplies the university's IPv6 route.
+      never-default=true
     '';
     path = "/etc/NetworkManager/system-connections/irb-vpn.nmconnection";
     mode = "0600";
