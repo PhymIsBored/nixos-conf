@@ -169,9 +169,14 @@
     "read": {
       "*": "allow",
       "*.env": "deny",
-      "*.env.*": "deny"
+      "*.env.*": "deny",
+      "~/.ssh": "deny",
+      "~/.ssh/*": "deny"
     },
-    "edit": "allow",
+    "edit": {
+      "*": "allow",
+      "~/.ssh/*": "deny"
+    },
     "websearch": "allow"
   }
 }
