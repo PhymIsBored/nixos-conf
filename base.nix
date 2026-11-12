@@ -9,7 +9,6 @@
   imports = [
     ./sops.nix
     ./modules/r-lang.nix
-    (import ./modules/master-overrides.nix [ "anki" ] { addToSystemPackages = false; })
   ];
 
   ## nix ######################################################################
