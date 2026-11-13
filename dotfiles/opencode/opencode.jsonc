@@ -22,37 +22,48 @@
       },
       "models": {
         "anthropic.claude-opus-5-5": {
-          "name": "Claude Opus 5.5"
+          "name": "Claude Opus 5.5",
+          "limit": { "context": 1000000, "output": 128000 }
         },
         "anthropic.claude-haiku-5-5": {
-          "name": "Claude Haiku 5.5"
+          "name": "Claude Haiku 5.5",
+          "limit": { "context": 1000000, "output": 128000 }
         },
         "openai.gpt-6-astra": {
-          "name": "OpenAI GPT 6 Astra"
+          "name": "OpenAI GPT 6 Astra",
+          "limit": { "context": 922000, "output": 128000 }
         },
         "openai.gpt-6.1-sol": {
-          "name": "OpenAI GPT 6.1 Sol"
+          "name": "OpenAI GPT 6.1 Sol",
+          "limit": { "context": 922000, "output": 128000 }
         },
         "openai.gpt-6.1-terra": {
-          "name": "OpenAI GPT 6.1 Terra"
+          "name": "OpenAI GPT 6.1 Terra",
+          "limit": { "context": 922000, "output": 128000 }
         },
         "openai.gpt-6-luna": {
-          "name": "OpenAI GPT 6 Luna"
+          "name": "OpenAI GPT 6 Luna",
+          "limit": { "context": 922000, "output": 128000 }
         },
         "hs-de.qwen3.8-27b": {
-          "name": "HS-DE Qwen 3.8"
+          "name": "HS-DE Qwen 3.8",
+          "limit": { "context": 262000, "output": 262000 }
         },
         "gwdg.glm-5.3-flash": {
-          "name": "GWDG GLM 5.3 Flash"
+          "name": "GWDG GLM 5.3 Flash",
+          "limit": { "context": 200000, "output": 200000 }
         },
         "gwdg.glm-5.3": {
-          "name": "GWDG GLM 5.3"
+          "name": "GWDG GLM 5.3",
+          "limit": { "context": 1000000, "output": 128000 }
         },
         "gwdg.mistral-large-4-1t-a52b": {
-          "name": "Mistral Large 4"
+          "name": "Mistral Large 4",
+          "limit": { "context": 1000000, "output": 128000 }
         },
         "gwdg.deepseek-v4.1-flash-1017": {
-          "name": "DeepSeek v4.1-flash"
+          "name": "DeepSeek v4.1-flash",
+          "limit": { "context": 1000000, "output": 256000 }
         }
       }
     }
@@ -60,7 +71,6 @@
   "permissions": [
     // Shell permissions
     { "action": "shell", "resource": "free *", "effect": "allow" },
-    { "action": "shell", "resource": "git *", "effect": "ask" },
     { "action": "shell", "resource": "*", "effect": "ask" },
     { "action": "shell", "resource": "7z *", "effect": "allow" },
     { "action": "shell", "resource": "bzip2 *", "effect": "allow" },
@@ -68,7 +78,7 @@
     { "action": "shell", "resource": "chmod *", "effect": "allow" },
     { "action": "shell", "resource": "chown *", "effect": "allow" },
     { "action": "shell", "resource": "curl *", "effect": "allow" },
-    { "action": "shell", "resource": "date", "effect": "allow" },
+    { "action": "shell", "resource": "date *", "effect": "allow" },
     { "action": "shell", "resource": "df *", "effect": "allow" },
     { "action": "shell", "resource": "diff *", "effect": "allow" },
     { "action": "shell", "resource": "dig *", "effect": "allow" },
@@ -97,15 +107,80 @@
     { "action": "shell", "resource": "false", "effect": "allow" },
     { "action": "shell", "resource": "file *", "effect": "allow" },
     { "action": "shell", "resource": "find *", "effect": "allow" },
-    { "action": "shell", "resource": "git branch *", "effect": "allow" },
-    { "action": "shell", "resource": "git clone *", "effect": "allow" },
-    { "action": "shell", "resource": "git diff *", "effect": "allow" },
-    { "action": "shell", "resource": "git log *", "effect": "allow" },
-    { "action": "shell", "resource": "git remote *", "effect": "allow" },
-    { "action": "shell", "resource": "git show *", "effect": "allow" },
+    // Git: ask by default, then allow non-destructive inspection forms.
+    // Assumes trusted Git configuration (e.g. pagers, filters, and fsmonitor).
+    // Mixed-purpose commands use exact forms or end-of-options markers so
+    // trailing arguments cannot introduce mutations, output files, or helpers.
+    { "action": "shell", "resource": "git *", "effect": "ask" },
+    { "action": "shell", "resource": "git blame --no-textconv -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git branch", "effect": "allow" },
+    { "action": "shell", "resource": "git branch --list", "effect": "allow" },
+    { "action": "shell", "resource": "git branch --list -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git branch --show-current", "effect": "allow" },
+    { "action": "shell", "resource": "git branch -a", "effect": "allow" },
+    { "action": "shell", "resource": "git branch -v", "effect": "allow" },
+    { "action": "shell", "resource": "git branch -vv", "effect": "allow" },
+    { "action": "shell", "resource": "git cat-file -e -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git cat-file -p -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git cat-file -s -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git cat-file -t -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git check-attr *", "effect": "allow" },
+    { "action": "shell", "resource": "git check-ignore *", "effect": "allow" },
+    { "action": "shell", "resource": "git config --get -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git config --get-all -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git config --get-regexp -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git config --list", "effect": "allow" },
+    { "action": "shell", "resource": "git count-objects *", "effect": "allow" },
+    { "action": "shell", "resource": "git describe *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff", "effect": "allow" },
+    { "action": "shell", "resource": "git diff -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --cached", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --cached -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --check", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --check -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --name-only", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --name-only -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --stat", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --stat -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --no-ext-diff --no-textconv --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git for-each-ref *", "effect": "allow" },
+    { "action": "shell", "resource": "git grep --no-textconv -n -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git log", "effect": "allow" },
+    { "action": "shell", "resource": "git log --oneline", "effect": "allow" },
+    { "action": "shell", "resource": "git log --no-ext-diff --no-textconv --no-show-signature --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git log --oneline --no-ext-diff --no-textconv --no-show-signature --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git ls-files *", "effect": "allow" },
+    { "action": "shell", "resource": "git ls-tree *", "effect": "allow" },
+    { "action": "shell", "resource": "git merge-base *", "effect": "allow" },
+    { "action": "shell", "resource": "git name-rev *", "effect": "allow" },
+    { "action": "shell", "resource": "git reflog", "effect": "allow" },
+    { "action": "shell", "resource": "git reflog show", "effect": "allow" },
+    { "action": "shell", "resource": "git reflog show --no-ext-diff --no-textconv --no-show-signature --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git remote", "effect": "allow" },
+    { "action": "shell", "resource": "git remote -v", "effect": "allow" },
+    { "action": "shell", "resource": "git remote get-url *", "effect": "allow" },
+    { "action": "shell", "resource": "git remote show -n -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git rev-list --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git rev-list --count --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git rev-list --left-right --count --end-of-options *", "effect": "allow" },
+    { "action": "shell", "resource": "git rev-parse *", "effect": "allow" },
+    { "action": "shell", "resource": "git shortlog", "effect": "allow" },
+    { "action": "shell", "resource": "git shortlog --summary --numbered HEAD", "effect": "allow" },
+    { "action": "shell", "resource": "git shortlog --summary --numbered HEAD -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git show", "effect": "allow" },
+    { "action": "shell", "resource": "git show --no-ext-diff --no-textconv --no-show-signature --end-of-options *", "effect": "allow" },
     { "action": "shell", "resource": "git stash list", "effect": "allow" },
+    { "action": "shell", "resource": "git stash show", "effect": "allow" },
+    { "action": "shell", "resource": "git stash show --no-ext-diff --no-textconv --end-of-options *", "effect": "allow" },
     { "action": "shell", "resource": "git status *", "effect": "allow" },
-    { "action": "shell", "resource": "git tag *", "effect": "allow" },
+    { "action": "shell", "resource": "git tag", "effect": "allow" },
+    { "action": "shell", "resource": "git tag --list", "effect": "allow" },
+    { "action": "shell", "resource": "git tag --list -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git tag -l", "effect": "allow" },
+    { "action": "shell", "resource": "git tag -l -- *", "effect": "allow" },
+    { "action": "shell", "resource": "git var *", "effect": "allow" },
+    { "action": "shell", "resource": "git version", "effect": "allow" },
+    { "action": "shell", "resource": "git worktree list *", "effect": "allow" },
     { "action": "shell", "resource": "gpg *", "effect": "allow" },
     { "action": "shell", "resource": "grep *", "effect": "allow" },
     { "action": "shell", "resource": "gunzip *", "effect": "allow" },
@@ -173,8 +248,12 @@
     { "action": "read", "resource": "~/.ssh/*", "effect": "deny" },
     { "action": "edit", "resource": "*", "effect": "allow" },
     { "action": "edit", "resource": "~/.ssh/*", "effect": "deny" },
+    // opencode config
     { "action": "edit", "resource": "~/.config/opencode/*", "effect": "ask" },
     { "action": "edit", "resource": "~/nixos-conf/dotfiles/opencode/*", "effect": "ask" },
+    { "action": "edit", "resource": "opencode.jsonc", "effect": "ask" },
+    { "action": "edit", "resource": "*/opencode.jsonc", "effect": "ask" },
+
     { "action": "websearch", "resource": "*", "effect": "allow" }
   ]
 }
