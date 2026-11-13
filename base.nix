@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   pkgs,
   lib,
   ...
@@ -9,6 +10,8 @@
   imports = [
     ./sops.nix
     ./modules/r-lang.nix
+    ./modules/hermes.nix
+    inputs.hermes-agent.nixosModules.default
   ];
 
   ## nix ######################################################################
