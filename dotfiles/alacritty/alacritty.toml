@@ -84,4 +84,5 @@ bindings = [
 { key = "B", mods = "Control|Shift", action = "SearchBackward" },
 { key = "C", mods = "Control|Shift", mode = "Vi", action = "ClearSelection" },
 { key = "Key0", mods = "Control", action = "ResetFontSize" },
+{ key = "Enter", mods = "Shift", chars = "\u001B[13;2u" },
 ]
