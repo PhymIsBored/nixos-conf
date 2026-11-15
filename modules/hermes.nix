@@ -5,7 +5,7 @@ let
     _config_version = 53;
     agent = {
       max_turns = 150;
-      reasoning_effort = "medium";
+      reasoning_effort = "max";
       clarify_timeout = 600;
     };
     display = {
@@ -16,9 +16,16 @@ let
       vim_mode = true;
       show_cost = true;
       busy_input_mode = "queue";
+      details_mode = "expanded";
+      sections = {
+        thinking = "collapsed";
+        tools = "expanded";
+        subagents = "expanded";
+        activity = "expanded";
+      };
     };
     model = {
-      default = "gwdg.deepseek-v4.1-flash-1017";
+      default = "gwdg.glm-5.3";
       provider = "upb";
       base_url = "https://ai-gateway.uni-paderborn.de/v1";
       api_mode = "chat_completions";
@@ -29,28 +36,16 @@ let
       base_url = "https://ai-gateway.uni-paderborn.de/v1";
       key_env = "UPB_API_KEY";
       api_mode = "chat_completions";
-      models = {
-        "anthropic.claude-opus-5-5".context_length = 1000000;
-        "anthropic.claude-haiku-5-5".context_length = 1000000;
-        "openai.gpt-6-astra".context_length = 922000;
-        "openai.gpt-6.1-sol".context_length = 922000;
-        "openai.gpt-6.1-terra".context_length = 922000;
-        "openai.gpt-6-luna".context_length = 922000;
-        "hs-de.qwen3.8-27b".context_length = 262000;
-        "gwdg.glm-5.3-flash".context_length = 200000;
-        "gwdg.glm-5.3".context_length = 1000000;
-        "gwdg.mistral-large-4-1t-a52b".context_length = 1000000;
-        "gwdg.deepseek-v4.1-flash-1017".context_length = 1000000;
-      };
+      default_model = "gwdg.glm-5.3";
     };
     gateway.service_install_choice = "decline";
-    # Approval policy, mirroring the opencode permission posture in
-    # dotfiles/opencode/opencode.jsonc: prompt for anything risky (manual),
-    # hard-deny SSH keys, env/secret files, and history-rewriting git ops.
+    # Approval policy: an auxiliary LLM classifies flagged commands (smart),
+    # with uncertain cases escalating to a manual prompt. Hard-deny SSH keys,
+    # env/secret files, and history-rewriting git ops regardless of mode.
     # Fnmatch globs, case-insensitive, matched against the whole terminal
     # command; blocks even with --yolo. Test: hermes approvals test -- <cmd>
     approvals = {
-      mode = "manual";
+      mode = "smart";
       deny = [
         "*.ssh/*" # any command touching SSH keys/config
         "*.hermes/.env*" # hermes's own secret store
@@ -62,11 +57,24 @@ let
         "*git clean -f*"
       ];
     };
+    # Guardian route: UPB fast model, with OpenRouter Claude Haiku 5.5 as failover.
+    # Requires OPENROUTER_API_KEY in ~/.hermes/.env.
+    auxiliary.approval = {
+      provider = "upb";
+      model = "gwdg.deepseek-v4.1-flash-1017";
+      timeout = 20;
+      fallback_chain = [
+        {
+          provider = "openrouter";
+          model = "anthropic/claude-haiku-5.5";
+        }
+      ];
+    };
     browser.cloud_provider = "local";
     computer_use.backend = "cua";
     video_gen = {
       provider = "openrouter";
-      model = "google/gemini-omni-1.2-flash";
+      model = "google/veo-3.1-lite";
     };
     platform_toolsets.cli = [
       "browser"
