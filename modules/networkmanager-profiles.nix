@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   # Shared Wi-Fi and VPN profiles for both NetworkManager Wi-Fi backends.
   sops.templates."eduroam" = {
@@ -153,5 +153,23 @@
     '';
     path = "/etc/NetworkManager/system-connections/irb-vpn.nmconnection";
     mode = "0600";
+  };
+
+  # connection.autoconnect is not implemented for VPN profiles, so the profile is activated
+  # explicitly once a link is up; Restart=on-failure covers the endpoint being briefly
+  # unreachable at boot.
+  systemd.services.irb-vpn = {
+    description = "Uni Paderborn (IRB 509) VPN";
+    wantedBy = [ "multi-user.target" ];
+    wants = [ "NetworkManager-wait-online.service" ];
+    after = [ "NetworkManager-wait-online.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.networkmanager}/bin/nmcli connection up 'Uni Paderborn (IRB 509)'";
+      ExecStop = "${pkgs.networkmanager}/bin/nmcli connection down 'Uni Paderborn (IRB 509)'";
+      Restart = "on-failure";
+      RestartSec = 20;
+    };
   };
 }
