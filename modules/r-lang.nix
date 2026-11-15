@@ -17,6 +17,12 @@ let
   };
 in
 {
+  # unstable's rstudio fails to build (hunspell dict collision); master has the
+  # fix plus a cached build
+  imports = [
+    (import ./master-overrides.nix [ "rstudio" "rstudioWrapper" ] { addToSystemPackages = false; })
+  ];
+
   environment.systemPackages = [
     RWithPackages
     RStudioWithPackages
