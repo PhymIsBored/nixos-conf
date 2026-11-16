@@ -125,10 +125,10 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    alacritty
     bluetui
     direnv
     ffmpeg
+    foot
     git
     htop
     jq

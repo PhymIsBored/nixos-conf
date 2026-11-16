@@ -9,6 +9,7 @@ let
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
     alacritty = "alacritty";
+    foot = "foot";
     niri = "niri";
     noctalia = "noctalia";
     nvim = "nvim";
