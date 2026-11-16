@@ -10,6 +10,7 @@ let
   configs = {
     alacritty = "alacritty";
     foot = "foot";
+    ghostty = "ghostty";
     niri = "niri";
     noctalia = "noctalia";
     nvim = "nvim";

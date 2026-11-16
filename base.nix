@@ -129,6 +129,7 @@
     direnv
     ffmpeg
     foot
+    ghostty
     git
     htop
     jq
