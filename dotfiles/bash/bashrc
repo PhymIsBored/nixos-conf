@@ -31,6 +31,7 @@ alias gdiff='git diff --patience --find-renames \
     --color-moved-ws=allow-indentation-change'
 
 alias clock='clock-rs'
+alias hermes='hermes -c' # stop empty sessions from piling up
 
 # Colors for command-substitution prompt output.
 # \001 and \002 tell readline these sequences are non-printing.
