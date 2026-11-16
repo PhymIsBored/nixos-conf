@@ -2,7 +2,6 @@
 
 let
   settings = {
-    _config_version = 53;
     agent = {
       max_turns = 150;
       reasoning_effort = "max";
@@ -12,9 +11,9 @@ let
       interface = "tui";
       skin = "default";
       show_reasoning = false;
+      platforms.cli.show_reasoning = true;
       timestamps = true;
       vim_mode = true;
-      show_cost = true;
       busy_input_mode = "queue";
       details_mode = "expanded";
       sections = {
@@ -39,23 +38,26 @@ let
       default_model = "gwdg.glm-5.3";
     };
     gateway.service_install_choice = "decline";
-    # Approval policy: an auxiliary LLM classifies flagged commands (smart),
-    # with uncertain cases escalating to a manual prompt. Hard-deny SSH keys,
-    # env/secret files, and history-rewriting git ops regardless of mode.
-    # Fnmatch globs, case-insensitive, matched against the whole terminal
-    # command; blocks even with --yolo. Test: hermes approvals test -- <cmd>
+    # Terminal-text globs block matches even under YOLO, not access through other tools.
+    # Broad Git rules also block normal pushes, soft resets, clean dry runs, and mentions.
     approvals = {
       mode = "smart";
+      cron_mode = "deny";
+      single_query_mode = "deny";
+      unattended_mode = "deny";
       deny = [
-        "*.ssh/*" # any command touching SSH keys/config
-        "*.hermes/.env*" # hermes's own secret store
-        "*.env" # project env files
+        "*.ssh/*"
+        "*.hermes/.env*"
+        "*.env"
         "*.env.*"
-        "*git push --force*"
-        "*git push -f *"
-        "*git reset --hard*"
-        "*git clean -f*"
+        "*git*push*"
+        "*git*reset*"
+        "*git*clean*"
       ];
+    };
+    security = {
+      redact_secrets = true;
+      protected_instruction_files = true;
     };
     # Guardian route: UPB fast model, with OpenRouter Claude Haiku 5.5 as failover.
     # Requires OPENROUTER_API_KEY in ~/.hermes/.env.
@@ -125,16 +127,36 @@ let
       "web"
       "x_search"
     ];
+    onboarding.seen = {
+      busy_input_prompt = true;
+      tool_progress_prompt = true;
+    };
     telemetry.shared_metrics = {
       enabled = false;
       send = false;
       offer_version = 2;
     };
   };
-  settingsFile = pkgs.writeText "hermes-settings.json" (builtins.toJSON settings);
-  mergeConfig = pkgs.writeScript "merge-hermes-config" ''
+  settingsFile =
+    pkgs.runCommand "hermes-settings.json"
+      {
+        settings = builtins.toJSON settings;
+        passAsFile = [ "settings" ];
+      }
+      ''
+        HOME=$TMPDIR ${config.services.hermes-agent.package.hermesVenv}/bin/python3 - "$settingsPath" > "$out" <<'PY'
+        import json, sys
+        from hermes_cli.config_defaults import DEFAULT_CONFIG
+
+        with open(sys.argv[1]) as f:
+            settings = json.load(f)
+        settings["_config_version"] = DEFAULT_CONFIG["_config_version"]
+        json.dump(settings, sys.stdout)
+        PY
+      '';
+  writeConfig = pkgs.writeScript "write-hermes-config" ''
     #!${pkgs.python3.withPackages (ps: [ ps.ruamel-yaml ])}/bin/python3
-    import json, os, shutil, sys, tempfile
+    import io, json, os, shutil, sys, tempfile
     from pathlib import Path
     from ruamel.yaml import YAML
 
@@ -144,26 +166,13 @@ let
     yaml.version = (1, 1)
     with open(sys.argv[2]) as f:
         settings = json.load(f)
+    rendered = io.StringIO()
+    yaml.dump(settings, rendered)
+    content = rendered.getvalue().encode("utf-8")
     if path.is_symlink():
         raise SystemExit(f"Refusing to overwrite symlink: {path}")
-    if path.exists():
-        with path.open() as f:
-            current = yaml.load(f) or {}
-    else:
-        current = {}
-    if not isinstance(current, dict):
-        raise SystemExit(f"Expected a YAML mapping in {path}")
-
-    def merge(base, values):
-        for key, value in values.items():
-            if isinstance(value, dict) and isinstance(base.get(key), dict):
-                merge(base[key], value)
-            else:
-                base[key] = value
-
-    before = json.dumps(current, sort_keys=True, default=str)
-    merge(current, settings)
-    if path.exists() and before == json.dumps(current, sort_keys=True, default=str):
+    if path.exists() and path.read_bytes() == content:
+        os.chmod(path, 0o600)
         sys.exit(0)
     if path.exists():
         fd, backup = tempfile.mkstemp(prefix="config.yaml.pre-nix-", dir=path.parent)
@@ -173,8 +182,8 @@ let
         print(f"Backed up Hermes config to {backup}")
     fd, temporary = tempfile.mkstemp(prefix=".config.yaml-", dir=path.parent)
     try:
-        with os.fdopen(fd, "w") as f:
-            yaml.dump(current, f)
+        with os.fdopen(fd, "wb") as f:
+            f.write(content)
         os.chmod(temporary, 0o600)
         os.replace(temporary, path)
     finally:
@@ -188,8 +197,9 @@ in
   environment.systemPackages = [ config.services.hermes-agent.package ];
 
   home-manager.users.finn = { lib, ... }: {
+    # Activation resets runtime changes to the declarative settings.
     home.activation.hermesConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      run ${mergeConfig} "$HOME/.hermes/config.yaml" ${settingsFile}
+      run ${writeConfig} "$HOME/.hermes/config.yaml" ${settingsFile}
     '';
   };
 }
