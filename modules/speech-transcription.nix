@@ -1,51 +1,55 @@
 { pkgs, ... }:
 let
-  sherpa = pkgs.python3.withPackages (ps: [ ps.sherpa-onnx ]);
-
-  mkModel = name: url: hash:
-    pkgs.fetchurl {
-      inherit url hash;
-      name = "${name}.tar.bz2";
-    };
-
-  parakeetTar = mkModel "sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8"
-    "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.tar.bz2"
-    "sha256-FJXpG1nX/FPdypHzQxdY7Jn4+iU/2w4ehRvg9ysUsPk=";
-
-  qwen3Tar = mkModel "sherpa-onnx-qwen3-asr-0.6B-int8-2026-03-25"
-    "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-qwen3-asr-0.6B-int8-2026-03-25.tar.bz2"
-    "sha256-OT+KFOL1+5Z0aqqzQpl6QGQQAfvVv5WSoICoMpF47pY=";
-
+  cudaRuntime = import ./speech-cuda-runtime.nix { inherit pkgs; };
+  parakeetTar = pkgs.fetchurl {
+    url = "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.tar.bz2";
+    hash = "sha256-FJXpG1nX/FPdypHzQxdY7Jn4+iU/2w4ehRvg9ysUsPk=";
+  };
   parakeetModel = pkgs.runCommand "parakeet-tdt-0.6b-v3-int8" { } ''
-    mkdir -p $out && tar -xjf ${parakeetTar} -C $out --strip-components=1
+    mkdir -p $out
+    tar -xjf ${parakeetTar} -C $out --strip-components=1
   '';
-
-  qwen3Model = pkgs.runCommand "qwen3-asr-0.6b-int8" { } ''
-    mkdir -p $out && tar -xjf ${qwen3Tar} -C $out --strip-components=1
+  qwenLauncher = pkgs.writeShellScript "qwen-transcription-launch" ''
+    set -euo pipefail
+    base="''${TRANSCRIBE_STATE_DIR:-''${XDG_DATA_HOME:-$HOME/.local/share}/transcription}"
+    mkdir -p "$base"
+    exec 9>"$base/setup.lock"
+    ${pkgs.util-linux}/bin/flock 9
+    venv="$base/qwen-venv"
+    lock=${./speech-requirements.lock}
+    if [ ! -f "$base/requirements-path" ] || [ "$(< "$base/requirements-path")" != "$lock" ]; then
+      if [ ! -x "$venv/bin/python" ]; then
+        ${pkgs.uv}/bin/uv venv --python /usr/bin/python3.12 "$venv"
+      fi
+      ${pkgs.uv}/bin/uv pip sync --python "$venv/bin/python" --require-hashes "$lock"
+      printf '%s\n' "$lock" > "$base/requirements-path"
+    fi
+    ${pkgs.util-linux}/bin/flock -u 9
+    exec "$venv/bin/python" ${./speech-transcribe.py} "$@"
   '';
-
+  qwenRuntime = pkgs.buildFHSEnv {
+    name = "qwen-transcription";
+    targetPkgs = p: [ p.python312 p.uv p.stdenv.cc.cc.lib p.zlib p.libsndfile p.sox p.ffmpeg p.cacert ];
+    runScript = qwenLauncher;
+    profile = ''
+      export LD_LIBRARY_PATH=/run/opengl-driver/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+      export UV_PYTHON_DOWNLOADS=never
+      export PYTHONDONTWRITEBYTECODE=1
+    '';
+  };
   transcribe = pkgs.writeShellApplication {
     name = "transcribe";
-    runtimeInputs = [ sherpa pkgs.ffmpeg ];
+    runtimeInputs = [ pkgs.python3 pkgs.ffmpeg ];
     text = ''
-      usage() {
-        echo "usage: transcribe <accuracy|speed> <audio-file>" >&2
-        exit 2
-      }
-      [ $# -eq 2 ] || usage
-      mode=$1
-      input=$2
-      tmp=$(mktemp --suffix=.wav)
-      trap 'rm -f "$tmp"' EXIT
-      ffmpeg -v error -y -i "$input" -ar 16000 -ac 1 "$tmp"
-      case "$mode" in
-        speed)
-          exec ${sherpa}/bin/python3 ${./speech-transcribe.py} parakeet ${parakeetModel} "$tmp"
-          ;;
+      case "''${1:-}" in
         accuracy)
-          exec ${sherpa}/bin/python3 ${./speech-transcribe.py} qwen3 ${qwen3Model} "$tmp"
+          exec ${qwenRuntime}/bin/qwen-transcription "$@"
           ;;
-        *) usage ;;
+        *)
+          export PARAKEET_MODEL=${parakeetModel}
+          export SHERPA_CUDA_BIN=${cudaRuntime}/bin/sherpa-onnx-offline
+          exec ${pkgs.python3}/bin/python3 ${./speech-transcribe.py} "$@"
+          ;;
       esac
     '';
   };
