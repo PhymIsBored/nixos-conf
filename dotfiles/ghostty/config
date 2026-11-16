@@ -1,0 +1,37 @@
+# font
+font-family = monospace
+font-size = 10
+
+# theme (mirrors foot.ini: OLED black, Nord accents)
+background = 000000
+foreground = d8dee9
+selection-background = 3b4252
+selection-foreground = d8dee9
+cursor-style = underline
+cursor-style-blink = false
+palette = 0=#3b4252
+palette = 1=#bf616a
+palette = 2=#a3be8c
+palette = 3=#ebcb8b
+palette = 4=#81a1c1
+palette = 5=#b48ead
+palette = 6=#88c0d0
+palette = 7=#e5e9f0
+palette = 8=#4c566a
+palette = 9=#bf616a
+palette = 10=#a3be8c
+palette = 11=#ebcb8b
+palette = 12=#81a1c1
+palette = 13=#b48ead
+palette = 14=#8fbcbb
+palette = 15=#eceff4
+
+# window
+window-width = 100
+window-height = 30
+window-padding-x = 0
+window-padding-y = 0
+
+# input
+mouse-hide-while-typing = true
+keybind = shift+enter=csi:13;2u

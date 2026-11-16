@@ -24,7 +24,7 @@ let
       };
     };
     model = {
-      default = "gwdg.glm-5.3";
+      default = "gwdg.deepseek-v4.1-flash-1017";
       provider = "upb";
       base_url = "https://ai-gateway.uni-paderborn.de/v1";
       api_mode = "chat_completions";
