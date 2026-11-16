@@ -1,0 +1,47 @@
+// niri compositor config. Hot-reloads on save; anything unset keeps niri's
+// defaults (Mod+Shift+/ shows all active binds).
+// Docs: https://niri-wm.github.io/niri/Configuration:-Introduction
+// Noctalia integration: https://docs.noctalia.dev/noctalia/compositor-settings/niri/
+
+spawn-at-startup "noctalia"
+
+input {
+    keyboard {
+        xkb {
+            layout "de"
+            variant "nodeadkeys"
+        }
+    }
+}
+
+binds {
+    // Noctalia shell (overrides the fuzzel/swaylock defaults, which aren't installed)
+    Mod+D { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+    Mod+Shift+D { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
+    Mod+grave { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
+    Super+Alt+L { spawn "noctalia" "msg" "session" "lock"; }
+    Alt+Tab { spawn "noctalia" "msg" "window-switcher"; }
+}
+
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+
+// Blurred wallpaper copy inside niri's overview (needs [backdrop] in noctalia's config).
+layer-rule {
+    match namespace="^noctalia-backdrop"
+    place-within-backdrop true
+}
+
+// Lets Noctalia notifications activate windows.
+debug {
+    honor-xdg-activation-with-invalid-serial
+}

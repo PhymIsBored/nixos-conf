@@ -1,0 +1,23 @@
+# Noctalia shell config. GUI changes land in ~/.local/state/noctalia/settings.toml
+# and override this file; noctalia never writes here.
+# Docs: https://docs.noctalia.dev/noctalia/configuration/
+
+[theme]
+mode = "dark"
+
+[shell]
+# Plasma's polkit agent is OnlyShowIn=KDE, so nothing else covers auth prompts
+# in the niri session.
+polkit_agent = true
+
+[backdrop]
+# Blurred/tinted wallpaper behind niri's overview (see the niri layer-rule).
+enabled = true
+
+[idle.behavior.lock]
+timeout = 600
+action = "lock"
+
+[idle.behavior.screen-off]
+timeout = 660
+action = "screen_off"

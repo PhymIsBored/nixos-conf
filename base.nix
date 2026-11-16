@@ -11,6 +11,7 @@
     ./sops.nix
     ./modules/r-lang.nix
     ./modules/hermes.nix
+    ./modules/niri.nix
     inputs.hermes-agent.nixosModules.default
   ];
 
