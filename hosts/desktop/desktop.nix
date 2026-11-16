@@ -18,6 +18,7 @@
     ../../modules/bar-native.nix
     ../../modules/virtualisation.nix
     ../../modules/opencode-unit.nix
+    ../../modules/speech-transcription.nix
   ];
 
   networking = {
