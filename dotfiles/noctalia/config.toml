@@ -14,6 +14,22 @@ polkit_agent = true
 # Blurred/tinted wallpaper behind niri's overview (see the niri layer-rule).
 enabled = true
 
+[bar.default]
+# Noctalia insets the bar 100px from each end by default, which leaves the bar
+# short of the screen edges. 0 = full width (this is "Ends Margin" in the GUI
+# under Bar → Layout). Note the GUI writes to
+# ~/.local/state/noctalia/settings.toml and that file wins over this one.
+margin_ends = 0
+margin_edge = 0
+
+[brightness]
+# Floor so a stuck brightness key can't black the panel out (0.0-1.0).
+minimum_brightness = 0.05
+# Opt-in DDC/CI discovery for external monitors; the internal panel keeps the
+# kernel backlight because backend "auto" prefers it. Needs the ddcutil package
+# and i2c device nodes (both from modules/niri.nix).
+enable_ddcutil = true
+
 [idle.behavior.lock]
 timeout = 600
 action = "lock"
