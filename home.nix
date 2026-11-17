@@ -39,6 +39,8 @@ in
       "jellyfin-mpv-shim/fonts".source = create_symlink "${dotfiles}/mpv/fonts";
     };
 
+  home.file.".hermes/config.yaml".source = create_symlink "${dotfiles}/hermes/config.yaml";
+
   ## programs ###################################################################
   programs.anki = {
     enable = true;
@@ -184,6 +186,7 @@ in
     gcc
     ghostscript
     gimp
+    osConfig.services.hermes-agent.package
     jellyfin-mpv-shim
     josm
     julia

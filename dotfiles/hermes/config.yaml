@@ -1,0 +1,140 @@
+%YAML 1.1
+---
+agent:
+  clarify_timeout: 600
+  max_turns: 150
+  reasoning_effort: max
+approvals:
+  cron_mode: deny
+  deny:
+  - '*.ssh/*'
+  - '*.hermes/.env*'
+  - '*.env'
+  - '*.env.*'
+  - '*git*push*'
+  - '*git*reset*'
+  - '*git*clean*'
+  mode: smart
+  single_query_mode: deny
+  unattended_mode: deny
+auxiliary:
+  approval:
+    fallback_chain:
+    - model: anthropic/claude-haiku-5.5
+      provider: openrouter
+    model: gwdg.deepseek-v4.1-flash-1017
+    provider: upb
+    timeout: 20
+  background_review:
+    model: gwdg.glm-5.3
+    provider: upb
+browser:
+  cloud_provider: local
+computer_use:
+  backend: cua
+delegation:
+  max_concurrent_children: 8
+  model: gwdg.deepseek-v4.1-flash-1017
+  provider: upb
+display:
+  busy_input_mode: queue
+  details_mode: expanded
+  interface: tui
+  platforms:
+    cli:
+      show_reasoning: true
+  sections:
+    activity: expanded
+    subagents: expanded
+    thinking: collapsed
+    tools: expanded
+  show_reasoning: false
+  skin: default
+  timestamps: true
+  vim_mode: true
+gateway:
+  service_install_choice: decline
+known_builtin_toolsets:
+  cli:
+  - browser
+  - clarify
+  - code_execution
+  - computer_use
+  - connections
+  - context_engine
+  - cronjob
+  - delegation
+  - discord
+  - discord_admin
+  - file
+  - image_gen
+  - kanban
+  - memory
+  - session_search
+  - skills
+  - stt
+  - terminal
+  - todo
+  - tts
+  - video
+  - video_gen
+  - vision
+  - web
+  - x_search
+known_plugin_toolsets:
+  cli:
+  - a2a
+memory:
+  nudge_interval: 25
+model:
+  api_mode: chat_completions
+  base_url: https://ai-gateway.uni-paderborn.de/v1
+  default: gwdg.deepseek-v4.1-flash-1017
+  provider: upb
+onboarding:
+  seen:
+    busy_input_prompt: true
+    tool_progress_prompt: true
+platform_toolsets:
+  cli:
+  - browser
+  - clarify
+  - code_execution
+  - computer_use
+  - connections
+  - cronjob
+  - delegation
+  - file
+  - image_gen
+  - memory
+  - session_search
+  - skills
+  - terminal
+  - todo
+  - tts
+  - video
+  - video_gen
+  - vision
+  - web
+providers:
+  upb:
+    api_mode: chat_completions
+    base_url: https://ai-gateway.uni-paderborn.de/v1
+    default_model: gwdg.glm-5.3
+    key_env: UPB_API_KEY
+security:
+  protected_instruction_files: true
+  redact_secrets: true
+skills:
+  creation_nudge_interval: 25
+terminal:
+  cwd: /home/finn
+telemetry:
+  shared_metrics:
+    enabled: false
+    offer_version: 2
+    send: false
+video_gen:
+  model: google/veo-3.1-lite
+  provider: openrouter
+_config_version: 53
