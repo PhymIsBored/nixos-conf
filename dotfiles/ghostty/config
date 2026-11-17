@@ -27,6 +27,8 @@ palette = 14=#8fbcbb
 palette = 15=#eceff4
 
 # window
+working-directory = home
+window-inherit-working-directory = false
 window-width = 100
 window-height = 30
 window-padding-x = 0
