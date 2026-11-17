@@ -29,6 +29,12 @@ let
       base_url = "https://ai-gateway.uni-paderborn.de/v1";
       api_mode = "chat_completions";
     };
+    # Subagents on UPB: 8 children, so parent + one aux call fit the 10-request cap.
+    delegation = {
+      provider = "upb";
+      model = "gwdg.deepseek-v4.1-flash-1017";
+      max_concurrent_children = 8;
+    };
     # UPB AI gateway, mirroring dotfiles/opencode/opencode.jsonc.
     # The key is read from UPB_API_KEY in ~/.hermes/.env (key_env), never from this file.
     providers.upb = {
@@ -72,6 +78,14 @@ let
         }
       ];
     };
+    # A different model from the main one makes Hermes replay a digest, not the full conversation.
+    auxiliary.background_review = {
+      provider = "upb";
+      model = "gwdg.glm-5.3";
+    };
+    # Review cadence (default 10): every N user turns / N tool iterations.
+    memory.nudge_interval = 25;
+    skills.creation_nudge_interval = 25;
     browser.cloud_provider = "local";
     computer_use.backend = "cua";
     video_gen = {
