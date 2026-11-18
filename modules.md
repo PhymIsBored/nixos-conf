@@ -45,6 +45,29 @@ PYTHONDONTWRITEBYTECODE=1 python3 modules/test-speech-transcribe.py
 nix-instantiate --parse modules/speech-transcription.nix >/dev/null
 ```
 
+## Local text-to-speech
+
+`modules/speech-tts.nix` installs `tts` on the desktop:
+
+```bash
+tts "Text to speak" --output speech.wav
+tts --input script.txt --output speech.wav --language English --speaker ryan
+tts --list-speakers
+```
+
+Qwen3-TTS 1.7B CustomVoice (Apache-2.0), revision-pinned in `speech-tts.py`, in BF16
+on CUDA with the model's preset speakers (no cloning). CUDA is default; `--device cpu`
+is explicit. Long input is split at sentence boundaries and joined with short pauses.
+
+It has its own hash-locked environment, separate from the transcription one, under
+`${XDG_DATA_HOME:-~/.local/share}/tts/qwen-tts-venv` (`TTS_STATE_DIR` overrides).
+First use installs it and downloads the checkpoint into the Hugging Face cache.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 modules/test-speech-tts.py
+nix-instantiate --parse modules/speech-tts.nix >/dev/null
+```
+
 ## Wi-Fi backends
 
 Import exactly one Wi-Fi module in the host configuration:

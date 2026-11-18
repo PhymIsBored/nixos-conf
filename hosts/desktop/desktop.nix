@@ -19,6 +19,7 @@
     ../../modules/virtualisation.nix
     ../../modules/opencode-unit.nix
     ../../modules/speech-transcription.nix
+    ../../modules/speech-tts.nix
   ];
 
   networking = {
