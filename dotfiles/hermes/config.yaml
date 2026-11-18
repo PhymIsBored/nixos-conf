@@ -127,6 +127,7 @@ security:
   redact_secrets: true
 skills:
   creation_nudge_interval: 25
+  create_dir: ~/.hermes-brain/skills
 terminal:
   cwd: /home/finn
 telemetry:
