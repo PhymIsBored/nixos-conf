@@ -175,6 +175,8 @@ in
 
   ## packages ###################################################################
   home.packages = with pkgs; [
+    antigravity-cli
+    antigravity-hub
     audacity
     btop
     calibre
