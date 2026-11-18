@@ -54,6 +54,10 @@ in
   # Only these non-secret Antigravity settings are managed; keep auth and state local.
   home.file.".gemini/config/config.json".source =
     create_symlink "${dotfiles}/gemini/config/config.json";
+  home.file.".gemini/config/hooks.json".source =
+    create_symlink "${dotfiles}/gemini/config/hooks.json";
+  home.file.".gemini/config/hooks".source =
+    create_symlink "${dotfiles}/gemini/config/hooks";
   home.file.".gemini/antigravity-cli/settings.json".source =
     create_symlink "${dotfiles}/gemini/antigravity-cli/settings.json";
 

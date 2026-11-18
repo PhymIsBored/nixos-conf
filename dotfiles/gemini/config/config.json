@@ -8,12 +8,13 @@
     "permissionGrantsV2Migrated": true,
     "remoteControlHostname": "lapnix-bright-ion",
     "sandboxEnabledAtV2Migration": true,
-    "permissionPreset": "AGENT_PERMISSION_PRESET_DEFAULT",
+    "permissionPreset": "AGENT_PERMISSION_PRESET_AUTO",
+    "nonWorkspaceFileAccessPolicy": "AGENT_SETTING_POLICY_ALLOW",
+    "allowAgentAccessNonWorkspaceFiles": true,
     "globalPermissionGrants": {
       "deny": [
         "read_file(/home/finn/.ssh)",
         "read_file(/home/finn/.hermes/.env)",
-        "read_file(.env)",
         "command(git push)",
         "command(git reset)",
         "command(git clean)",
@@ -69,6 +70,7 @@
         "command(printenv)",
         "command(ps)",
         "command(pwd)",
+        "command(rg)",
         "command(route)",
         "command(rsync)",
         "command(scp)",

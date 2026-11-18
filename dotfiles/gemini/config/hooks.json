@@ -1,0 +1,16 @@
+{
+  "block-secrets": {
+    "PreToolUse": [
+      {
+        "matcher": "^(read_file|write_file|edit_file|view_file|view_file_outline|view_code_item|write_to_file|replace_file_content|multi_replace_file_content|code_action|file_change|grep_search|find|find_by_name|list_directory|list_dir|read_notebook|edit_notebook|move|read_resource|run_command|shell_exec)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./hooks/block-secrets.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
