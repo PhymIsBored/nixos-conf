@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: treefmt
+        name: treefmt
+        entry: treefmt --fail-on-change --no-cache
+        language: unsupported
+        files: '\.(nix|py|pyi)$'
+      - id: betterleaks
+        name: betterleaks
+        entry: betterleaks git --pre-commit --redact --staged
+        language: unsupported
+        pass_filenames: false
+        always_run: true

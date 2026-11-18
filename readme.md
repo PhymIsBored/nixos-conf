@@ -2,6 +2,12 @@
 
 [Module documentation >](modules.md)
 
+# Formatting and Git hooks
+
+Home Manager installs the formatters and Betterleaks and enables the pre-commit hook for `~/nixos-conf`. The hook formats staged Nix and Python files with treefmt and scans staged changes with Betterleaks. If formatting changes files, review and stage the changes before retrying the commit.
+
+Run `treefmt` or `nix fmt` to format configured files in the working tree. A clone at a different path needs its own hook configuration.
+
 # Setup Sops-nix
 
 1. Generate ssh keys (without passphrase)

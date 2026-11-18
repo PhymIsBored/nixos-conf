@@ -23,6 +23,8 @@
       ...
     }:
     {
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.treefmt;
+
       nixosConfigurations = {
         lapnix = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";

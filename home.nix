@@ -167,6 +167,15 @@ in
     settings = {
       core.pager = "less -R";
     };
+    includes = [
+      {
+        condition = "gitdir:${config.home.homeDirectory}/nixos-conf/.git";
+        contents.hook."pre-commit.pre-commit" = {
+          event = "pre-commit";
+          command = "${pkgs.pre-commit}/bin/pre-commit hook-impl --hook-type pre-commit --";
+        };
+      }
+    ];
   };
 
   programs.vesktop = {
@@ -194,6 +203,7 @@ in
     antigravity-cli
     antigravity-hub
     audacity
+    betterleaks
     btop
     calibre
     chromium
@@ -223,14 +233,17 @@ in
     openvpn3
     pandoc
     pdfarranger
+    pre-commit
     python3
     ripgrep
+    ruff
     shellcheck
     shfmt
     signal-desktop-kwallet
     sops
     spotify
     thunderbird
+    treefmt
     yazi
   ];
 }
