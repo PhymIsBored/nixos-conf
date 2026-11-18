@@ -65,14 +65,17 @@ PATH_ARG_KEYS = {
 }
 
 
-def is_secret_path(raw: str) -> str | None:
+def is_secret_path(raw: str, *, from_command: bool = False) -> str | None:
     """Return a reason string if raw looks like a secret file or path, else None."""
     if not raw or not isinstance(raw, str):
         return None
 
     candidate = raw.strip()
-    if candidate.startswith("file://"):
-        candidate = candidate[7:]
+    if from_command:
+        candidate = candidate.strip("\"'`,:;}][")
+    if not candidate:
+        return None
+    candidate = candidate.removeprefix("file://")
 
     expanded = os.path.expanduser(candidate)
     normalized = expanded.replace("\\", "/")
@@ -95,8 +98,12 @@ def is_secret_path(raw: str) -> str | None:
     if base in SECRET_EXACT_NAMES:
         return f"access to secret/key file ({raw}) is restricted"
 
-    if any(base.endswith(suffix) for suffix in SECRET_SUFFIXES):
-        return f"access to private key/certificate file ({raw}) is restricted"
+    for suffix in SECRET_SUFFIXES:
+        if base.endswith(suffix) and len(base) > len(suffix):
+            # Avoid false positives on jq selectors like `.key` or `.value.key`.
+            if from_command and base.startswith("."):
+                continue
+            return f"access to private key/certificate file ({raw}) is restricted"
 
     return None
 
@@ -125,10 +132,10 @@ def check_command(command_line: str) -> str | None:
         tokens = command_line.split()
 
     for token in tokens:
-        for part in re.split(r"[=<>|;&()]+", token):
+        for part in re.split(r"[\s=<>|;&(){}\[\],]+", token):
             if not part:
                 continue
-            reason = is_secret_path(part)
+            reason = is_secret_path(part, from_command=True)
             if reason:
                 return reason
     return None
@@ -137,8 +144,8 @@ def check_command(command_line: str) -> str | None:
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
-    except Exception:
-        print("{}")
+    except (json.JSONDecodeError, OSError):
+        print(json.dumps({"decision": "allow"}))
         return 0
 
     tool_call = payload.get("toolCall") or {}
@@ -158,7 +165,7 @@ def main() -> int:
     if reason:
         print(json.dumps({"decision": "deny", "reason": reason}))
     else:
-        print("{}")
+        print(json.dumps({"decision": "allow"}))
     return 0
 
 
