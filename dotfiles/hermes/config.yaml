@@ -7,21 +7,21 @@ agent:
 approvals:
   cron_mode: deny
   deny:
-  - '*.ssh/*'
-  - '*.hermes/.env*'
-  - '*.env'
-  - '*.env.*'
-  - '*git*push*'
-  - '*git*reset*'
-  - '*git*clean*'
+    - '*.ssh/*'
+    - '*.hermes/.env*'
+    - '*.env'
+    - '*.env.*'
+    - '*git*push*'
+    - '*git*reset*'
+    - '*git*clean*'
   mode: smart
   single_query_mode: deny
   unattended_mode: deny
 auxiliary:
   approval:
     fallback_chain:
-    - model: anthropic/claude-haiku-5.5
-      provider: openrouter
+      - model: anthropic/claude-haiku-5.5
+        provider: openrouter
     model: gwdg.deepseek-v4.1-flash-1017
     provider: upb
     timeout: 20
@@ -56,34 +56,34 @@ gateway:
   service_install_choice: decline
 known_builtin_toolsets:
   cli:
-  - browser
-  - clarify
-  - code_execution
-  - computer_use
-  - connections
-  - context_engine
-  - cronjob
-  - delegation
-  - discord
-  - discord_admin
-  - file
-  - image_gen
-  - kanban
-  - memory
-  - session_search
-  - skills
-  - stt
-  - terminal
-  - todo
-  - tts
-  - video
-  - video_gen
-  - vision
-  - web
-  - x_search
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - discord
+    - discord_admin
+    - file
+    - image_gen
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - stt
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
 known_plugin_toolsets:
   cli:
-  - a2a
+    - a2a
 memory:
   nudge_interval: 25
 model:
@@ -97,25 +97,25 @@ onboarding:
     tool_progress_prompt: true
 platform_toolsets:
   cli:
-  - browser
-  - clarify
-  - code_execution
-  - computer_use
-  - connections
-  - cronjob
-  - delegation
-  - file
-  - image_gen
-  - memory
-  - session_search
-  - skills
-  - terminal
-  - todo
-  - tts
-  - video
-  - video_gen
-  - vision
-  - web
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - cronjob
+    - delegation
+    - file
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
 providers:
   upb:
     api_mode: chat_completions
@@ -137,4 +137,4 @@ telemetry:
 video_gen:
   model: google/veo-3.1-lite
   provider: openrouter
-_config_version: 53
+_config_version: 54
