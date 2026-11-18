@@ -7,6 +7,16 @@
 let
   dotfiles = "${config.home.homeDirectory}/nixos-conf/dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  # Chromium infers its secret-service backend from XDG_CURRENT_DESKTOP; under
+  # niri it falls back to basic_text and cannot decrypt Signal's kwallet6 key.
+  signal-desktop-kwallet = pkgs.symlinkJoin {
+    name = "signal-desktop";
+    paths = [ pkgs.signal-desktop ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/signal-desktop --add-flags "--password-store=kwallet6"
+    '';
+  };
   configs = {
     alacritty = "alacritty";
     foot = "foot";
@@ -211,7 +221,7 @@ in
     ripgrep
     shellcheck
     shfmt
-    signal-desktop
+    signal-desktop-kwallet
     sops
     spotify
     thunderbird
