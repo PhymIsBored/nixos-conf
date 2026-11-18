@@ -1,0 +1,17 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/settings.json",
+  "agentMode": "accept-edits",
+  "allowNonWorkspaceAccess": true,
+  "editorMode": "vim",
+  "enableTerminalSandbox": true,
+  "model": "Gemini 4 Argon (Medium)",
+  "permissions": {
+    "allow": [
+      "command(ls)",
+      "command(cat)"
+    ]
+  },
+  "trustedWorkspaces": [
+    "/home/finn"
+  ]
+}

@@ -26,6 +26,7 @@ let
     nvim = "nvim";
     opencode = "opencode";
     mpv = "mpv";
+    yazi = "yazi";
   };
 in
 {
@@ -50,6 +51,11 @@ in
     };
 
   home.file.".hermes/config.yaml".source = create_symlink "${dotfiles}/hermes/config.yaml";
+  # Only these non-secret Antigravity settings are managed; keep auth and state local.
+  home.file.".gemini/config/config.json".source =
+    create_symlink "${dotfiles}/gemini/config/config.json";
+  home.file.".gemini/antigravity-cli/settings.json".source =
+    create_symlink "${dotfiles}/gemini/antigravity-cli/settings.json";
 
   ## programs ###################################################################
   programs.anki = {
