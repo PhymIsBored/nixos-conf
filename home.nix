@@ -52,14 +52,18 @@ in
 
   home.file.".hermes/config.yaml".source = create_symlink "${dotfiles}/hermes/config.yaml";
   # Only these non-secret Antigravity settings are managed; keep auth and state local.
-  home.file.".gemini/config/config.json".source =
-    create_symlink "${dotfiles}/gemini/config/config.json";
+  # Antigravity replaces symlinks with regular files on save, so force = true avoids .backup collisions.
+  home.file.".gemini/config/config.json" = {
+    source = create_symlink "${dotfiles}/gemini/config/config.json";
+    force = true;
+  };
   home.file.".gemini/config/hooks.json".source =
     create_symlink "${dotfiles}/gemini/config/hooks.json";
-  home.file.".gemini/config/hooks".source =
-    create_symlink "${dotfiles}/gemini/config/hooks";
-  home.file.".gemini/antigravity-cli/settings.json".source =
-    create_symlink "${dotfiles}/gemini/antigravity-cli/settings.json";
+  home.file.".gemini/config/hooks".source = create_symlink "${dotfiles}/gemini/config/hooks";
+  home.file.".gemini/antigravity-cli/settings.json" = {
+    source = create_symlink "${dotfiles}/gemini/antigravity-cli/settings.json";
+    force = true;
+  };
 
   ## programs ###################################################################
   programs.anki = {

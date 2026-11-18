@@ -85,6 +85,7 @@ known_plugin_toolsets:
   cli:
     - a2a
 memory:
+  memory_char_limit: 3000
   nudge_interval: 25
 model:
   api_mode: chat_completions
