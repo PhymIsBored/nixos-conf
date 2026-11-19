@@ -37,6 +37,10 @@ SECRET_PATH_SUBSTRINGS = (
     "/.aws/credentials",
     "/.kube/config",
     "/.docker/config.json",
+    "/.config/sops/age/",
+    "sops/age/keys.txt",
+    "/var/lib/sops-nix/",
+    "/run/secrets",
 )
 
 PATH_ARG_KEYS = {

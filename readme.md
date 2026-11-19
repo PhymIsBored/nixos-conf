@@ -10,22 +10,20 @@ Run `treefmt` or `nix fmt` to format configured files in the working tree. A clo
 
 # Setup Sops-nix
 
-1. Generate ssh keys (without passphrase)
+1. Generate a dedicated age key (keep SSH keys separate and passphrase-protected)
 ```bash
-ssh-keygen -t ed25519
+mkdir -p ~/.config/sops/age
+chmod 700 ~/.config/sops/age
+nix shell nixpkgs#age -c age-keygen -o ~/.config/sops/age/keys.txt
+chmod 600 ~/.config/sops/age/keys.txt
 ```
 
-2. Generate sops private-key from ssh-key
-```bash
-nix run nixpkgs#ssh-to-age -- -private-key -i ~/.ssh/id_ed25519 > ~/.config/sops/age/keys.txt
-```
-
-3. Generate sops public-key from private-key
+2. Print the age public key
 ```bash
 nix shell nixpkgs#age -c age-keygen -y ~/.config/sops/age/keys.txt
 ```
 
-4. Add your public-key to `.sops.yaml`
+3. Add your public key to `.sops.yaml`
 ```yaml
 keys:
   - &lapnix age1sxluvsegl5a5f7mv2pnh2y9rqym8tdhdgrwwygz0yk2wljjmlpqs9y9cq2 
@@ -49,7 +47,7 @@ creation_rules:
 
 ```
 
-5. reencrypt the secrets on host that already has secrets
+4. Re-encrypt the secret data keys on a host that already has access (without writing plaintext to disk)
 ```bash
-find ~/nixos-conf/secrets/ -type f -exec sh -c 'sops -d -i "$1" && sops -e -i "$1"' _ {} \;
+find ~/nixos-conf/secrets/ -type f -exec sops updatekeys -y {} +
 ```

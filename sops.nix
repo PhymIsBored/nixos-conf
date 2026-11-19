@@ -5,13 +5,6 @@
     age.keyFile = "/home/finn/.config/sops/age/keys.txt";
     secrets = {
       "eduroam/identity" = { };
-      "eduroam/pk_pass" = { };
-      "eduroam/client_cert.p12" = {
-        sopsFile = ./secrets/eduroam_client_cert.p12;
-        format = "binary";
-        #group = "wpa_supplicant";
-        mode = "0640";
-      };
       "eduroam/client_cert.crt.pem" = {
         sopsFile = ./secrets/eduroam_client_cert.crt.pem;
         format = "binary";
@@ -39,7 +32,6 @@
       "finnsWlan5G/psk" = { };
       "finnsHotspot/psk" = { };
       "Unifi/psk" = { };
-      "syncthing-pwd" = { };
       "anki/username" = {
         owner = "finn";
         mode = "0400";
