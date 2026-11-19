@@ -2,8 +2,10 @@
 
 # Flake inputs
 - [nixos-unstable](https://github.com/NixOS/nixpkgs/tree/nixos-unstable)
+- [nixpkgs-master](https://github.com/NixOS/nixpkgs/tree/master)
 - [home-manager](https://github.com/nix-community/home-manager)
 - [sops-nix](https://github.com/Mic92/sops-nix)
+- [hermes-agent](https://github.com/NousResearch/hermes-agent)
 
 # Non-Flake inputs
 ## dotfiles/

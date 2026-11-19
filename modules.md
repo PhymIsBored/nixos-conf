@@ -41,7 +41,6 @@ location and `HF_HOME` to override the model cache. Installation needs network
 access initially. Model revision IDs are pinned in `speech-transcribe.py`.
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 python3 modules/test-speech-transcribe.py
 nix-instantiate --parse modules/speech-transcription.nix >/dev/null
 ```
 
@@ -64,7 +63,6 @@ It has its own hash-locked environment, separate from the transcription one, und
 First use installs it and downloads the checkpoint into the Hugging Face cache.
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 python3 modules/test-speech-tts.py
 nix-instantiate --parse modules/speech-tts.nix >/dev/null
 ```
 
@@ -81,23 +79,18 @@ Both use NetworkManager and import `modules/networkmanager-profiles.nix` for the
 same SOPS-managed Wi-Fi and VPN profiles. NetworkManager and its OpenVPN plugin
 are enabled in `base.nix`; the secrets are declared in `sops.nix`.
 
-The iwd module also installs its native profiles and loads `pkcs8_key_parser` for
-eduroam. The WPA module selects NetworkManager's `wpa_supplicant` backend and gives
+The iwd module loads `pkcs8_key_parser` for eduroam and currently retains the
+`eduroam.8021x` template until NetworkManager-only provisioning is tested on
+campus. The WPA module selects NetworkManager's `wpa_supplicant` backend and gives
 the hardened service read access to the eduroam PEM certificates and private key.
 No host-specific settings need changing when switching the import.
-
-Evaluate both backends on both hosts without activating either:
-
-```bash
-nix eval --impure --json --file tests/wifi.nix
-```
 
 ## BAR Native
 
 Launch it with `bar-native` or the
 **Beyond All Reason (Native)** desktop entry. Both the Lobby and its downloaded
 engines run outside FHS, using the host graphics driver without forcing X11 or
-PRIME offload. The existing `bar` and `bar-lobby` launchers remain installed.
+PRIME offload. The existing `beyond-all-reason` launcher remains installed.
 
 To enable it on another x86_64-linux host:
 
