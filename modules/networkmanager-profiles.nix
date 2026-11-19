@@ -6,7 +6,7 @@
       [802-1x]
       ca-cert=${config.sops.secrets."eduroam/ca_cert.pem".path}
       client-cert=${config.sops.secrets."eduroam/client_cert.crt.pem".path}
-      subject-match=radius.uni-paderborn.de
+      domain-suffix-match=radius.uni-paderborn.de
       eap=tls
       identity=${config.sops.placeholder."eduroam/identity"}
       private-key=${config.sops.secrets."eduroam/client_cert.key.pem".path}
@@ -155,21 +155,48 @@
     mode = "0600";
   };
 
-  # connection.autoconnect is not implemented for VPN profiles, so the profile is activated
-  # explicitly once a link is up; Restart=on-failure covers the endpoint being briefly
-  # unreachable at boot.
+  # connection.autoconnect is not implemented for VPN profiles. Trigger activation
+  # asynchronously from a NetworkManager dispatcher hook whenever a physical link
+  # comes up, avoiding boot stalls while offline and re-arming after resume/roaming.
   systemd.services.irb-vpn = {
     description = "Uni Paderborn (IRB 509) VPN";
-    wantedBy = [ "multi-user.target" ];
-    wants = [ "NetworkManager-wait-online.service" ];
-    after = [ "NetworkManager-wait-online.service" ];
+    after = [ "NetworkManager.service" ];
     serviceConfig = {
       Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.networkmanager}/bin/nmcli connection up 'Uni Paderborn (IRB 509)'";
-      ExecStop = "${pkgs.networkmanager}/bin/nmcli connection down 'Uni Paderborn (IRB 509)'";
-      Restart = "on-failure";
-      RestartSec = 20;
+      ExecStart = pkgs.writeShellScript "irb-vpn-up" ''
+        set -euo pipefail
+        if ${pkgs.networkmanager}/bin/nmcli -t -f NAME connection show --active \
+          | ${pkgs.gnugrep}/bin/grep -Fxq 'Uni Paderborn (IRB 509)'; then
+          exit 0
+        fi
+        exec ${pkgs.networkmanager}/bin/nmcli connection up 'Uni Paderborn (IRB 509)'
+      '';
     };
   };
+
+  networking.networkmanager.dispatcherScripts = [
+    {
+      type = "basic";
+      source = pkgs.writeShellScript "irb-vpn-dispatcher" ''
+        iface="$1"
+        action="$2"
+
+        if [ "$action" != "up" ]; then
+          exit 0
+        fi
+
+        case "$iface" in
+          lo | tun* | tap* | wt* | virbr* | docker* | br-* | veth*)
+            exit 0
+            ;;
+        esac
+
+        if [ "''${CONNECTION_ID:-}" = "Uni Paderborn (IRB 509)" ]; then
+          exit 0
+        fi
+
+        exec ${pkgs.systemd}/bin/systemctl --no-block start irb-vpn.service
+      '';
+    }
+  ];
 }

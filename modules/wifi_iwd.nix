@@ -11,11 +11,12 @@
   networking.networkmanager.wifi.backend = "iwd";
   networking.wireless.iwd.settings = {
     Network.EnableIPv6 = true;
-    Settings.AutoConnect = true;
     Settings.AddressRandomization = "network";
     Settings.AddressRandomizationRange = "full";
   };
 
+  # Kept until eduroam is tested on campus with NetworkManager's own iwd provisioning
+  # (iwd-config-path=auto); keep pkcs8_key_parser even after removing this template.
   sops.templates."eduroam.8021x" = {
     content = ''
       [Security]
@@ -27,24 +28,6 @@
       EAP-TLS-ServerDomainMask=radius.uni-paderborn.de
     '';
     path = "/var/lib/iwd/eduroam.8021x";
-    mode = "0600";
-  };
-
-  sops.templates."finnsWlan5G.psk" = {
-    content = ''
-      [Security]
-      Passphrase=${config.sops.placeholder."finnsWlan5G/psk"}
-    '';
-    path = "/var/lib/iwd/finnsWlan5G.psk";
-    mode = "0600";
-  };
-
-  sops.templates."finnsHotspot.psk" = {
-    content = ''
-      [Security]
-      Passphrase=${config.sops.placeholder."finnsHotspot/psk"}
-    '';
-    path = "/var/lib/iwd/finnsHotspot.psk";
     mode = "0600";
   };
 }
