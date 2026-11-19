@@ -20,7 +20,15 @@ let
   '';
   ttsRuntime = pkgs.buildFHSEnv {
     name = "qwen-tts";
-    targetPkgs = p: [ p.python312 p.uv p.stdenv.cc.cc.lib p.zlib p.libsndfile p.sox p.cacert ];
+    targetPkgs = p: [
+      p.python312
+      p.uv
+      p.stdenv.cc.cc.lib
+      p.zlib
+      p.libsndfile
+      p.sox
+      p.cacert
+    ];
     runScript = ttsLauncher;
     profile = ''
       export LD_LIBRARY_PATH=/run/opengl-driver/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}

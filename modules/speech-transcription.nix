@@ -29,7 +29,16 @@ let
   '';
   qwenRuntime = pkgs.buildFHSEnv {
     name = "qwen-transcription";
-    targetPkgs = p: [ p.python312 p.uv p.stdenv.cc.cc.lib p.zlib p.libsndfile p.sox p.ffmpeg p.cacert ];
+    targetPkgs = p: [
+      p.python312
+      p.uv
+      p.stdenv.cc.cc.lib
+      p.zlib
+      p.libsndfile
+      p.sox
+      p.ffmpeg
+      p.cacert
+    ];
     runScript = qwenLauncher;
     profile = ''
       export LD_LIBRARY_PATH=/run/opengl-driver/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
@@ -39,7 +48,10 @@ let
   };
   transcribe = pkgs.writeShellApplication {
     name = "transcribe";
-    runtimeInputs = [ pkgs.python3 pkgs.ffmpeg ];
+    runtimeInputs = [
+      pkgs.python3
+      pkgs.ffmpeg
+    ];
     text = ''
       case "''${1:-}" in
         accuracy)

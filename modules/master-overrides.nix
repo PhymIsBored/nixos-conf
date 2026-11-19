@@ -1,5 +1,7 @@
 packages:
-{ addToSystemPackages ? true }:
+{
+  addToSystemPackages ? true,
+}:
 {
   inputs,
   pkgs,
