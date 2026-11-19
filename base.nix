@@ -31,7 +31,10 @@
   };
 
   ## Bootloader ###############################################################
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 10;
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -68,6 +71,7 @@
     inputMethod = {
       type = "fcitx5";
       enable = true;
+      fcitx5.waylandFrontend = true;
       fcitx5.addons = with pkgs; [
         fcitx5-anthy
         fcitx5-gtk
@@ -82,9 +86,6 @@
   };
 
   console.keyMap = "de-latin1-nodeadkeys";
-  environment.variables = {
-    XMODIFIERS = "@im=fcitx";
-  };
 
   ## desktop ##################################################################
   # Enable the X11 windowing system.

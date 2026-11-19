@@ -53,7 +53,34 @@ let
       pkgs.ffmpeg
     ];
     text = ''
-      case "''${1:-}" in
+      mode=""
+      skip_next=0
+      end_of_opts=0
+      for arg in "$@"; do
+        if [ "$skip_next" -eq 1 ]; then
+          skip_next=0
+          continue
+        fi
+        if [ "$end_of_opts" -eq 0 ]; then
+          case "$arg" in
+            --)
+              end_of_opts=1
+              continue
+              ;;
+            --language | --format | --device | --output | --chunk-seconds | --limit-seconds)
+              skip_next=1
+              continue
+              ;;
+            --language=* | --format=* | --device=* | --output=* | --chunk-seconds=* | --limit-seconds=* | -*)
+              continue
+              ;;
+          esac
+        fi
+        mode="$arg"
+        break
+      done
+
+      case "$mode" in
         accuracy)
           exec ${qwenRuntime}/bin/qwen-transcription "$@"
           ;;

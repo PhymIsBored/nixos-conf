@@ -35,11 +35,11 @@ alias hermes='hermes -c' # stop empty sessions from piling up
 
 # Colors for command-substitution prompt output.
 # \001 and \002 tell readline these sequences are non-printing.
-readonly cyan=$'\001\e[36m\002'
-readonly green=$'\001\e[32m\002'
-readonly yellow=$'\001\e[33m\002'
-readonly red=$'\001\e[31m\002'
-readonly reset=$'\001\e[0m\002'
+_prompt_cyan=$'\001\e[36m\002'
+_prompt_green=$'\001\e[32m\002'
+_prompt_yellow=$'\001\e[33m\002'
+_prompt_red=$'\001\e[31m\002'
+_prompt_reset=$'\001\e[0m\002'
 
 # custom prompt
 _prompt_git() {
@@ -52,44 +52,44 @@ _prompt_git() {
 
 
   if [ "$ref" = "HEAD" ] || [ -z "$ref" ]; then
-    sha="${cyan}initial${reset}"
+    sha="${_prompt_cyan}initial${_prompt_reset}"
 
     if git rev-parse '@{upstream}' >/dev/null 2>&1; then
-      ref="${green}main${reset}"
+      ref="${_prompt_green}main${_prompt_reset}"
     else
-      ref="${cyan}main${reset}"
+      ref="${_prompt_cyan}main${_prompt_reset}"
     fi
   else
     sha="$(git rev-parse --short HEAD 2>/dev/null)"
 
     if [ "$(git rev-parse --is-bare-repository 2>/dev/null)" = "true" ]; then
-      sha="${cyan}${sha}${reset}"
+      sha="${_prompt_cyan}${sha}${_prompt_reset}"
     elif ! git diff-index --quiet --ignore-submodules --cached HEAD 2>/dev/null; then
-      sha="${yellow}${sha}${reset}"
+      sha="${_prompt_yellow}${sha}${_prompt_reset}"
     elif ! timeout 0.05s git -C "$dot_git/.." diff-index \
       --quiet --ignore-submodules --diff-filter=ad HEAD 2>/dev/null; then
-      sha="${red}${sha}${reset}"
+      sha="${_prompt_red}${sha}${_prompt_reset}"
     else
-      sha="${green}${sha}${reset}"
+      sha="${_prompt_green}${sha}${_prompt_reset}"
     fi
 
     if ! git rev-parse '@{upstream}' >/dev/null 2>&1; then
-      ref="${cyan}${ref}${reset}"
+      ref="${_prompt_cyan}${ref}${_prompt_reset}"
     else
       n_ahead="$(git rev-list --count @{upstream}..HEAD 2>/dev/null)"
       n_behind="$(git rev-list --count HEAD..@{upstream} 2>/dev/null)"
 
       if [ "$n_ahead" -eq 0 ]; then
         if [ "$n_behind" -eq 0 ]; then
-          ref="${green}${ref}${reset}"
+          ref="${_prompt_green}${ref}${_prompt_reset}"
         else
-          ref="${yellow}${ref}-${n_behind}${reset}"
+          ref="${_prompt_yellow}${ref}-${n_behind}${_prompt_reset}"
         fi
       else
         if [ "$n_behind" -eq 0 ]; then
-          ref="${yellow}${ref}+${n_ahead}${reset}"
+          ref="${_prompt_yellow}${ref}+${n_ahead}${_prompt_reset}"
         else
-          ref="${red}${ref}+${n_ahead}-${n_behind}${reset}"
+          ref="${_prompt_red}${ref}+${n_ahead}-${n_behind}${_prompt_reset}"
         fi
       fi
     fi
@@ -99,5 +99,5 @@ _prompt_git() {
   printf '%s' "$ref"
 }
 
-export PS1='${green}\u@\h ${cyan}\w \[$(tput sgr0)\]$(_prompt_git) $ '
+PS1='${_prompt_green}\u@\h ${_prompt_cyan}\w ${_prompt_reset}$(_prompt_git) $ '
 

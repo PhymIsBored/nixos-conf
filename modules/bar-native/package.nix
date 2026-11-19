@@ -95,6 +95,8 @@ stdenvNoCC.mkDerivation {
     stdenv.cc.cc.lib
   ];
   runtimeDependencies = [
+    # Electron loads libudev with dlopen, so autoPatchelf cannot infer it.
+    (lib.getLib systemd)
     libglvnd
     libpulseaudio
     libsecret

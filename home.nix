@@ -123,7 +123,7 @@ in
     enable = true;
     initExtra = builtins.readFile ./dotfiles/bash/bashrc;
     sessionVariables = {
-      EDITOR = "vim";
+      EDITOR = "nvim";
     };
   };
 
@@ -190,7 +190,7 @@ in
     enable = true;
 
     vencord.settings = {
-      autoUpdate = true;
+      autoUpdate = false;
       autoUpdateNotification = true;
       notifyAboutUpdates = true;
 
