@@ -5,7 +5,8 @@
     user = "finn";
     dataDir = "/home/finn";
     configDir = "/home/finn/.config/syncthing";
-    openDefaultPorts = false; # not necessary for local gui
+    # Opens sync (22000/tcp+udp) and local discovery (21027/udp); GUI stays on 127.0.0.1:8384.
+    openDefaultPorts = true;
     #guiAddress = "localhost:8384";
     settings = {
       #devices = {

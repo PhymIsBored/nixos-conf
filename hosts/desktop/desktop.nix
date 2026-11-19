@@ -28,9 +28,6 @@
       allowedTCPPorts = [
         1234 # lmstudio
       ];
-      allowedUDPPorts = [
-        9 # wake-on-lan
-      ];
     };
     interfaces.enp8s0.wakeOnLan.enable = true;
   };

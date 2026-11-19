@@ -16,7 +16,9 @@
   # Redirect USB devices into guests using SPICE.
   virtualisation.spiceUSBRedirection.enable = true;
 
-  networking.firewall = {
+  # Scope guest DNS/DHCP to libvirt's default NAT bridge instead of all interfaces.
+  # Can likely be removed once verified against a running guest (libvirt manages its own rules).
+  networking.firewall.interfaces."virbr0" = {
     allowedTCPPorts = [
       53
     ];
