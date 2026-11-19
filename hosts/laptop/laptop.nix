@@ -8,7 +8,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/wifi_iwd.nix
-    ../../modules/syncthing.nix
     ../../modules/steam.nix
     ../../modules/netbird.nix
   ];
@@ -44,9 +43,4 @@
       )
     '';
   };
-
-  environment.systemPackages = with pkgs; [
-    asusctl
-  ];
-
 }

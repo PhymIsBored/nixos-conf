@@ -11,6 +11,7 @@
     ./sops.nix
     ./modules/r-lang.nix
     ./modules/niri.nix
+    ./modules/syncthing.nix
     ./modules/hermes-brain.nix
     inputs.hermes-agent.nixosModules.default
   ];
@@ -127,7 +128,6 @@
 
   environment.systemPackages = with pkgs; [
     bluetui
-    direnv
     ffmpeg
     foot
     ghostty

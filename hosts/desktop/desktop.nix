@@ -10,7 +10,6 @@
     ../../modules/nvidia.nix
     ../../modules/wifi_iwd.nix
     ../../modules/steam.nix
-    ../../modules/syncthing.nix
     ../../modules/docker.nix
     ../../modules/netbird.nix
     ../../modules/faf.nix

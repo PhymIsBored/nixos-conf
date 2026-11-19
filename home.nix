@@ -18,7 +18,6 @@ let
     '';
   };
   configs = {
-    alacritty = "alacritty";
     foot = "foot";
     ghostty = "ghostty";
     niri = "niri";
@@ -230,10 +229,8 @@ in
     libreoffice
     mpv
     naps2
-    neovim
     nil
     nixfmt
-    nixpkgs-fmt
     nodejs
     obsidian
     openai-whisper

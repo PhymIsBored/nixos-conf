@@ -17,50 +17,49 @@
   outputs =
     inputs@{
       nixpkgs,
-      nixpkgs-master,
       home-manager,
       sops-nix,
       ...
     }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      mkHost =
+        hostModule:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./base.nix
+            hostModule
+            sops-nix.nixosModules.sops
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.finn = import ./home.nix;
+              home-manager.backupFileExtension = "backup";
+            }
+          ];
+        };
+    in
     {
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.treefmt;
+      formatter.${system} = pkgs.writeShellApplication {
+        name = "treefmt";
+        runtimeInputs = [
+          pkgs.treefmt
+          pkgs.nixfmt
+          pkgs.ruff
+        ];
+        text = ''
+          exec treefmt "$@"
+        '';
+      };
 
       nixosConfigurations = {
-        lapnix = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./base.nix
-            ./hosts/laptop/laptop.nix
-            sops-nix.nixosModules.sops
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.finn = import ./home.nix;
-              home-manager.backupFileExtension = "backup";
-            }
-          ];
-        };
-
-        desknix = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./base.nix
-            ./hosts/desktop/desktop.nix
-            sops-nix.nixosModules.sops
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.finn = import ./home.nix;
-              home-manager.backupFileExtension = "backup";
-            }
-          ];
-        };
+        lapnix = mkHost ./hosts/laptop/laptop.nix;
+        desknix = mkHost ./hosts/desktop/desktop.nix;
       };
     };
 }
