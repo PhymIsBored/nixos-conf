@@ -27,6 +27,7 @@
         "write_file(/home/finn/.gemini/antigravity-cli/settings.json)"
       ],
       "allow": [
+        "read_file(*)",
         "read_url(*)",
         "command(7z)",
         "command(bzip2)",

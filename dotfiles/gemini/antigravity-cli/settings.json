@@ -3,8 +3,17 @@
   "agentMode": "auto",
   "allowNonWorkspaceAccess": true,
   "editorMode": "vim",
-  "enableTerminalSandbox": true,
+  "enableTerminalSandbox": false,
   "model": "Gemini 4 Argon (Medium)",
+  "permissions": {
+    "allow": [
+      "read_file(*)"
+    ],
+    "deny": [
+      "read_file(/home/finn/.ssh)",
+      "read_file(/home/finn/.hermes/.env)"
+    ]
+  },
   "trustedWorkspaces": [
     "/home/finn"
   ]

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """PreToolUse hook to block access to .env and common secret files."""
 
+import glob
 import json
 import os
 import re
@@ -33,7 +34,6 @@ SECRET_EXACT_NAMES = {
 SECRET_SUFFIXES = (".pem", ".key", ".p12", ".pfx")
 
 SECRET_PATH_SUBSTRINGS = (
-    "/.ssh/",
     "/.aws/credentials",
     "/.kube/config",
     "/.docker/config.json",
@@ -64,46 +64,60 @@ PATH_ARG_KEYS = {
     "output_path",
 }
 
+QUOTE_CHARS = "\"'`"
+COMMAND_STRIP_CHARS = QUOTE_CHARS + ",:;}]["
 
-def is_secret_path(raw: str, *, from_command: bool = False) -> str | None:
-    """Return a reason string if raw looks like a secret file or path, else None."""
-    if not raw or not isinstance(raw, str):
+
+def exists(path: str, cwd: str) -> bool:
+    full = os.path.join(cwd, path)
+    if any(c in path for c in "*?["):
+        return bool(glob.glob(full))
+    return os.path.exists(full)
+
+
+def is_secret_path(raw: str, *, cwd: str | None = None) -> str | None:
+    """Return a reason string if raw looks like a secret file or path, else None.
+
+    cwd is set for tokens taken from shell commands: suffix-only matches
+    (.key/.pem/...) are then only denied if the file actually exists, since
+    command text is full of things like `item.key` that aren't paths.
+    """
+    if not isinstance(raw, str):
         return None
 
-    candidate = raw.strip()
-    if from_command:
-        candidate = candidate.strip("\"'`,:;}][")
+    candidate = raw.strip().strip(
+        COMMAND_STRIP_CHARS if cwd is not None else QUOTE_CHARS
+    )
+    candidate = candidate.removeprefix("file://")
     if not candidate:
         return None
-    candidate = candidate.removeprefix("file://")
 
-    expanded = os.path.expanduser(candidate)
-    normalized = expanded.replace("\\", "/")
-    parts = PurePosixPath(normalized).parts
-    base = PurePosixPath(normalized).name.lower()
+    normalized = os.path.expanduser(candidate)
+    path = PurePosixPath(normalized)
+    base = path.name.lower()
 
-    if ".ssh" in parts:
-        return f"access to .ssh path ({raw}) is restricted"
-
-    for sub in SECRET_PATH_SUBSTRINGS:
-        if sub in normalized or normalized.endswith(sub.rstrip("/")):
-            return f"access to credential path ({raw}) is restricted"
-
-    if base in ALLOWED_ENV_NAMES or base.endswith(".pub"):
+    if base.endswith(".pub") or base in ALLOWED_ENV_NAMES:
         return None
 
+    if ".ssh" in path.parts:
+        return f"access to .ssh path ({candidate}) is restricted"
+
+    for sub in SECRET_PATH_SUBSTRINGS:
+        if sub in normalized or normalized.endswith(sub):
+            return f"access to credential path ({candidate}) is restricted"
+
     if base == ".env" or base.startswith(".env."):
-        return f"access to environment file ({raw}) is restricted"
+        return f"access to environment file ({candidate}) is restricted"
 
     if base in SECRET_EXACT_NAMES:
-        return f"access to secret/key file ({raw}) is restricted"
+        return f"access to secret/key file ({candidate}) is restricted"
 
-    for suffix in SECRET_SUFFIXES:
-        if base.endswith(suffix) and len(base) > len(suffix):
-            # Avoid false positives on jq selectors like `.key` or `.value.key`.
-            if from_command and base.startswith("."):
-                continue
-            return f"access to private key/certificate file ({raw}) is restricted"
+    if (
+        base.endswith(SECRET_SUFFIXES)
+        and not base.startswith(".")
+        and (cwd is None or exists(normalized, cwd))
+    ):
+        return f"access to private key/certificate file ({candidate}) is restricted"
 
     return None
 
@@ -121,9 +135,9 @@ def iter_path_values(obj: object):
             yield from iter_path_values(item)
 
 
-def check_command(command_line: str) -> str | None:
+def check_command(command_line: str, cwd: str) -> str | None:
     """Inspect shell command tokens for references to secret files."""
-    if not command_line:
+    if not isinstance(command_line, str) or not command_line:
         return None
 
     try:
@@ -133,11 +147,33 @@ def check_command(command_line: str) -> str | None:
 
     for token in tokens:
         for part in re.split(r"[\s=<>|;&(){}\[\],]+", token):
-            if not part:
-                continue
-            reason = is_secret_path(part, from_command=True)
+            reason = is_secret_path(part, cwd=cwd)
             if reason:
                 return reason
+    return None
+
+
+def decide(payload: dict) -> str | None:
+    tool_call = payload.get("toolCall") or {}
+    tool_name = (tool_call.get("name") or "").lower()
+    args = tool_call.get("args") or {}
+    if isinstance(args, str):
+        try:
+            args = json.loads(args)
+        except json.JSONDecodeError:
+            args = {"CommandLine": args}
+    if not isinstance(args, dict):
+        return None
+
+    if tool_name in {"run_command", "shell_exec"}:
+        cmd = args.get("CommandLine") or args.get("command") or args.get("cmd") or ""
+        cwd = args.get("Cwd") or payload.get("cwd") or os.getcwd()
+        return check_command(cmd, str(cwd).strip(QUOTE_CHARS))
+
+    for path_val in iter_path_values(args):
+        reason = is_secret_path(path_val)
+        if reason:
+            return reason
     return None
 
 
@@ -148,19 +184,10 @@ def main() -> int:
         print(json.dumps({"decision": "allow"}))
         return 0
 
-    tool_call = payload.get("toolCall") or {}
-    tool_name = (tool_call.get("name") or "").lower()
-    args = tool_call.get("args") or {}
-
-    reason = None
-    if tool_name in {"run_command", "shell_exec"}:
-        cmd = args.get("CommandLine") or args.get("command") or args.get("cmd") or ""
-        reason = check_command(cmd)
-    else:
-        for path_val in iter_path_values(args):
-            reason = is_secret_path(path_val)
-            if reason:
-                break
+    try:
+        reason = decide(payload) if isinstance(payload, dict) else None
+    except Exception as exc:  # noqa: BLE001 - fail closed, but say why
+        reason = f"block-secrets hook error: {type(exc).__name__}: {exc}"
 
     if reason:
         print(json.dumps({"decision": "deny", "reason": reason}))
