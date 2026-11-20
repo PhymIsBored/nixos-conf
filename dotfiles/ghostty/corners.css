@@ -1,0 +1,6 @@
+/* libadwaita rounds windows at 15px (--window-radius); keep the corners subtle.
+   niri's geometry-corner-radius only clips, it never rounds app-drawn corners. */
+window.csd {
+    --window-radius: 2px;
+    border-radius: 2px;
+}
