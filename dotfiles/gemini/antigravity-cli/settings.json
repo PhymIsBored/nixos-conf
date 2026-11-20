@@ -1,20 +1,54 @@
 {
-  "$schema": "https://antigravity.google/schemas/v1/settings.json",
   "agentMode": "auto",
+  "toolPermission": "always-proceed",
   "allowNonWorkspaceAccess": true,
   "editorMode": "vim",
   "enableTerminalSandbox": false,
-  "model": "Gemini 4 Hydrogen (Medium)",
   "permissions": {
     "allow": [
-      "read_file(*)"
+      "read_file(*)",
+      "write_file(*)",
+      "command(*)",
+      "read_url(*)",
+      "execute_url(*)",
+      "mcp(*)"
+    ],
+    "ask": [
+      "write_file(/home/finn/.config/opencode)",
+      "write_file(/home/finn/nixos-conf/dotfiles/opencode)",
+      "write_file(/home/finn/.gemini/config)",
+      "write_file(/home/finn/.gemini/antigravity-cli/settings.json)",
+      "write_file(/home/finn/nixos-conf/dotfiles/gemini)",
+      "write_file(/home/finn/.hermes/config.yaml)",
+      "write_file(/home/finn/nixos-conf/dotfiles/hermes)"
     ],
     "deny": [
       "read_file(/home/finn/.ssh)",
-      "read_file(/home/finn/.hermes/.env)"
+      "read_file(/home/finn/.hermes/.env)",
+      "read_file(/home/finn/.aws/credentials)",
+      "read_file(/home/finn/.kube/config)",
+      "read_file(/home/finn/.docker/config.json)",
+      "read_file(/home/finn/.config/sops/age)",
+      "read_file(/var/lib/sops-nix)",
+      "read_file(/run/secrets)",
+      "command(sudo)",
+      "command(doas)",
+      "command(pkexec)",
+      "command(su)",
+      "command(git push)",
+      "command(regex:git -C .* push)",
+      "command(git reset --hard)",
+      "command(regex:git -C .* reset --hard)",
+      "command(git clean)",
+      "command(regex:git -C .* clean)",
+      "command(regex:rm -[rfRF]+ (/|/\\*|~|~/|/home/finn|\\$HOME))",
+      "command(regex:rm -[rR] -f (/|/\\*|~|~/|/home/finn|\\$HOME))",
+      "command(regex:mkfs.*)",
+      "command(dd)",
+      "command(nixos-rebuild switch)",
+      "command(nixos-rebuild boot)",
+      "command(regex:nixos-rebuild .* (switch|boot))",
+      "command(regex:nixos-rebuild .* .* (switch|boot))"
     ]
-  },
-  "trustedWorkspaces": [
-    "/home/finn"
-  ]
+  }
 }

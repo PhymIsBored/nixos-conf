@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ./hooks/block-secrets.py",
+            "command": "python3 /home/finn/.gemini/config/hooks/block-secrets.py",
             "timeout": 5
           }
         ]

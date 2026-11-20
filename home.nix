@@ -40,8 +40,12 @@ in
     };
 
   home.file.".hermes/config.yaml".source = create_symlink "${dotfiles}/hermes/config.yaml";
-  # Only these non-secret Antigravity settings are managed; keep auth and state local.
-  # Antigravity replaces symlinks with regular files on save, so force = true avoids .backup collisions.
+  # Antigravity config split (see dotfiles/gemini/README.md):
+  # - ~/.gemini/config/{config.json,hooks.json,hooks} are symlinked directly to dotfiles;
+  #   config.json uses force = true because Antigravity replaces symlinks on save.
+  # - ~/.gemini/antigravity-cli/settings.json is intentionally NOT symlinked so agy can
+  #   persist mutable state (trustedWorkspaces, model); declarative CLI policy is loaded
+  #   per session via the `agy --settings` alias in dotfiles/bash/bashrc.
   home.file.".gemini/config/config.json" = {
     source = create_symlink "${dotfiles}/gemini/config/config.json";
     force = true;
@@ -49,10 +53,6 @@ in
   home.file.".gemini/config/hooks.json".source =
     create_symlink "${dotfiles}/gemini/config/hooks.json";
   home.file.".gemini/config/hooks".source = create_symlink "${dotfiles}/gemini/config/hooks";
-  home.file.".gemini/antigravity-cli/settings.json" = {
-    source = create_symlink "${dotfiles}/gemini/antigravity-cli/settings.json";
-    force = true;
-  };
 
   ## programs ###################################################################
   programs.anki = {
@@ -110,7 +110,9 @@ in
 
   programs.bash = {
     enable = true;
-    initExtra = builtins.readFile ./dotfiles/bash/bashrc;
+    initExtra = ''
+      source "${dotfiles}/bash/bashrc"
+    '';
     sessionVariables = {
       EDITOR = "nvim";
     };

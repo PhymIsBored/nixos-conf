@@ -32,6 +32,9 @@ alias gdiff='git diff --patience --find-renames \
 
 alias clock='clock-rs'
 alias hermes='hermes -c' # stop empty sessions from piling up
+# Overlay declarative Antigravity CLI policy per session so ~/.gemini/antigravity-cli/settings.json
+# can stay local/mutable for model & trustedWorkspaces (see dotfiles/gemini/README.md).
+alias agy='agy --settings "$HOME/nixos-conf/dotfiles/gemini/antigravity-cli/settings.json"'
 
 # Colors for command-substitution prompt output.
 # \001 and \002 tell readline these sequences are non-printing.

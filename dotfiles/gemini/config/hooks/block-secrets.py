@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""PreToolUse hook to block access to .env and common secret files."""
+"""PreToolUse hook to block access to .env and common secret files.
+
+Registered via ~/.gemini/config/hooks.json for both Antigravity CLI (`agy`) and
+the Antigravity App/IDE (see dotfiles/gemini/README.md).
+
+Complements the native `read_file(...)` denies in settings.json / config.json:
+Antigravity's native file denies only accept absolute paths, so this hook catches
+relative/workspace `.env*` files, private keys, credential paths, and shell
+command references while still allowing `.env.example` / `.sample` / `.template`
+/ `.dist` templates.
+"""
 
 import glob
 import json
