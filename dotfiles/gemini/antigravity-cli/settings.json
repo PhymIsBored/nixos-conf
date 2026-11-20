@@ -4,7 +4,7 @@
   "allowNonWorkspaceAccess": true,
   "editorMode": "vim",
   "enableTerminalSandbox": false,
-  "model": "Gemini 4 Argon (Medium)",
+  "model": "Gemini 4 Hydrogen (Medium)",
   "permissions": {
     "allow": [
       "read_file(*)"
