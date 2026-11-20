@@ -4,6 +4,16 @@
 
 spawn-at-startup "noctalia"
 
+// Advertise KDE 6 as a fallback desktop so apps that pick their keyring backend
+// from XDG_CURRENT_DESKTOP (Chromium, Electron, QtKeychain, python-keyring, etc.)
+// select kwallet6 instead of falling back to basic_text. Niri's `environment`
+// block only applies to spawned processes (not systemd --user), so xdg-desktop-portal
+// and systemd services still see XDG_CURRENT_DESKTOP=niri.
+environment {
+    XDG_CURRENT_DESKTOP "niri:KDE"
+    KDE_SESSION_VERSION "6"
+}
+
 // The "Important Hotkeys" overlay now pops up at session start (Mod+F1
 // reopens it). Uncomment the line below to suppress the startup pop-up.
 hotkey-overlay {
@@ -17,6 +27,44 @@ input {
             variant "nodeadkeys"
         }
     }
+}
+
+// Tighter than niri's defaults (gaps 16, focus-ring width 4). The `border`
+// block is off by default; the visible ring around windows is the focus ring.
+layout {
+    gaps 8
+
+    focus-ring {
+        width 2
+    }
+}
+
+// Display layout, copied from KDE's kwinoutputconfig.json: Samsung 1080p on the
+// left, Dell 4K in the middle (1.7x, 240 Hz, primary), AOC 1080p rotated upright
+// on the right. Positions are logical (scaled) pixels and must stay adjacent —
+// the cursor only crosses between touching outputs. niri replaces an output's
+// position if it would overlap another one.
+output "DP-6" {
+    mode "3840x2160@239.991"
+    scale 1.7
+    position x=1920 y=376
+    focus-at-startup
+    // KDE has VRR "Automatic"; on-demand only engages it for windows matching
+    // the variable-refresh-rate window rule.
+    // variable-refresh-rate on-demand=true
+}
+
+output "HDMI-A-2" {
+    mode "1920x1080@60.000"
+    scale 1
+    position x=0 y=552
+}
+
+output "DP-4" {
+    mode "1920x1080@60.000"
+    scale 1
+    transform "90"
+    position x=4179 y=50
 }
 
 // IMPORTANT: niri does not fill in the default keybindings. Most sections get
@@ -35,6 +83,7 @@ binds {
     // Programs & Noctalia panels.
     Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
     Mod+Space hotkey-overlay-title="Run an Application: noctalia launcher" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+    Mod+Shift+Space hotkey-overlay-title="Toggle Input Method: fcitx5" { spawn "fcitx5-remote" "-t"; }
     Mod+D hotkey-overlay-title="Noctalia control center" { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
     Mod+asciicircum hotkey-overlay-title="Noctalia clipboard" { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
     Mod+S hotkey-overlay-title="Noctalia settings" { spawn "noctalia" "msg" "settings-toggle"; }
@@ -206,7 +255,7 @@ binds {
 
 // Rounded corners on all windows.
 window-rule {
-    geometry-corner-radius 12
+    geometry-corner-radius 1
     clip-to-geometry true
 }
 
