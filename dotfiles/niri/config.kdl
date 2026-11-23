@@ -68,6 +68,20 @@ output "DP-4" {
     scale 1
     transform "90"
     position x=4179 y=50
+
+    // Upright output: windows stack as full-width rows instead of half-width
+    // columns. Consume a neighbour into the column (Mod+Comma/Period) to split.
+    layout {
+        default-column-width { proportion 1.0; }
+        preset-column-widths {
+            proportion 1.0
+            proportion 0.5
+        }
+        preset-window-heights {
+            proportion 0.5
+            proportion 0.33333
+        }
+    }
 }
 
 // IMPORTANT: niri does not fill in the default keybindings. Most sections get
