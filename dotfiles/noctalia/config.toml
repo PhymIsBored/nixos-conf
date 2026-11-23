@@ -21,6 +21,10 @@ enabled = true
 # ~/.local/state/noctalia/settings.toml and that file wins over this one.
 margin_ends = 0
 margin_edge = 0
+# Smart auto-hide retracts the bar once a workspace has windows, but `reserve_space`
+# (on by default) keeps its compositor exclusive zone, so tiled windows still leave
+# a dead strip at the top. Reserve only while the bar is actually on screen.
+auto_hide_reserve_space = true
 
 [brightness]
 # Floor so a stuck brightness key can't black the panel out (0.0-1.0).
