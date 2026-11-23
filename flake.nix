@@ -11,6 +11,9 @@
     sops-nix.url = "github:mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
@@ -19,6 +22,7 @@
       nixpkgs,
       home-manager,
       sops-nix,
+      disko,
       ...
     }:
     let
@@ -32,6 +36,7 @@
           modules = [
             ./base.nix
             hostModule
+            disko.nixosModules.disko
             sops-nix.nixosModules.sops
 
             home-manager.nixosModules.home-manager

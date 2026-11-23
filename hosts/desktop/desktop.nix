@@ -20,6 +20,8 @@
     ../../modules/speech-tts.nix
   ];
 
+  disko.devices.disk.main.device = "/dev/disk/by-id/REPLACE_WITH_YOUR_DISK_ID";
+
   networking = {
     hostName = "desknix";
     firewall = {

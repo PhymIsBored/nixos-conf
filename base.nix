@@ -9,6 +9,7 @@
 {
   imports = [
     ./sops.nix
+    ./modules/disko-btrfs-luks.nix
     ./modules/r-lang.nix
     ./modules/niri.nix
     ./modules/syncthing.nix
@@ -39,6 +40,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  zramSwap.enable = true;
 
   ## networking ###############################################################
   networking.networkmanager.enable = true;

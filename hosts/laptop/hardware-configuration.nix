@@ -25,29 +25,7 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/mapper/luks-a2655a1f-d581-4af2-bc3a-5f8afd8dd5fa";
-    fsType = "ext4";
-  };
-
-  boot.initrd.luks.devices."luks-a2655a1f-d581-4af2-bc3a-5f8afd8dd5fa".device =
-    "/dev/disk/by-uuid/a2655a1f-d581-4af2-bc3a-5f8afd8dd5fa";
-
-  boot.initrd.luks.devices."luks-a3534241-8c62-4238-a461-b9665b5e62e8".device =
-    "/dev/disk/by-uuid/a3534241-8c62-4238-a461-b9665b5e62e8";
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/8044-552C";
-    fsType = "vfat";
-    options = [
-      "fmask=0077"
-      "dmask=0077"
-    ];
-  };
-
-  swapDevices = [
-    { device = "/dev/mapper/luks-a3534241-8c62-4238-a461-b9665b5e62e8"; }
-  ];
+  # fileSystems, LUKS, and swapDevices are managed by disko (modules/disko-btrfs-luks.nix)
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
