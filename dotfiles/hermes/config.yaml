@@ -97,11 +97,23 @@ auxiliary:
     fallback_chain:
       - model: anthropic/claude-haiku-5.5
         provider: openrouter
-    model: gwdg.deepseek-v4.1-flash-1017
+    model: anthropic.claude-haiku-5-5
     provider: upb
     timeout: 20
   background_review:
     model: gwdg.glm-5.3
+    provider: upb
+  compression:
+    model: gwdg.glm-5.3
+    provider: upb
+  memory_query_rewrite:
+    model: kiconnect.qwen3.8-27b
+    provider: upb
+  title_generation:
+    model: kiconnect.qwen3.8-27b
+    provider: upb
+  vision:
+    model: anthropic.claude-haiku-5-5
     provider: upb
 browser:
   cloud_provider: local
