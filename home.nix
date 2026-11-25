@@ -15,6 +15,7 @@ let
     nvim = "nvim";
     opencode = "opencode";
     mpv = "mpv";
+    sway = "sway";
     yazi = "yazi";
   };
 in

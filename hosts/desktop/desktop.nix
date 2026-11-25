@@ -15,6 +15,7 @@
     ../../modules/faf.nix
     ../../modules/beyond-all-reason.nix
     ../../modules/bar-native.nix
+    ../../modules/sway.nix
     ../../modules/virtualisation.nix
     ../../modules/speech-transcription.nix
     ../../modules/speech-tts.nix
