@@ -108,7 +108,7 @@ binds {
     Mod+F1 { show-hotkey-overlay; }
 
     // Programs & Noctalia panels.
-    Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
+    Mod+Return hotkey-overlay-title="Open a Terminal: foot" { spawn "foot"; }
     Mod+Space hotkey-overlay-title="Run an Application: noctalia launcher" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
     Mod+Shift+Space hotkey-overlay-title="Toggle Input Method: fcitx5" { spawn "fcitx5-remote" "-t"; }
     Mod+D hotkey-overlay-title="Noctalia control center" { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
