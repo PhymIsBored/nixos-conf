@@ -32,6 +32,31 @@ in
       recursive = true;
     }) configs
     // {
+      "fcitx5/config".text = ''
+        [Hotkey/TriggerKeys]
+        0=Super+space
+        1=Zenkaku_Hankaku
+        2=Hangul
+
+        [Behavior]
+        ActiveByDefault=False
+      '';
+      "fcitx5/profile".text = ''
+        [Groups/0]
+        Name=Default
+        Default Layout=de
+        # The first item is the inactive default; DefaultIM is the active IM.
+        DefaultIM=mozc
+
+        [Groups/0/Items/0]
+        Name=keyboard-de-nodeadkeys
+
+        [Groups/0/Items/1]
+        Name=mozc
+
+        [GroupOrder]
+        0=Default
+      '';
       # use mpv conf for jellyfin-mpv-shim
       "jellyfin-mpv-shim/mpv.conf".source = create_symlink "${dotfiles}/mpv/mpv.conf";
       "jellyfin-mpv-shim/input.conf".source = create_symlink "${dotfiles}/mpv/input.conf";
