@@ -139,6 +139,9 @@ display:
   skin: default
   timestamps: true
   vim_mode: true
+fallback_providers:
+  - model: anthropic/claude-haiku-5.5
+    provider: openrouter
 gateway:
   service_install_choice: decline
 known_builtin_toolsets:
@@ -210,6 +213,10 @@ providers:
     base_url: https://ai-gateway.uni-paderborn.de/v1
     default_model: gwdg.glm-5.3
     key_env: UPB_API_KEY
+  lmstudio:
+    transport: chat_completions
+    base_url: http://localhost:1234/v1
+    default_model: qwen3.8-27b
 security:
   protected_instruction_files: true
   redact_secrets: true
