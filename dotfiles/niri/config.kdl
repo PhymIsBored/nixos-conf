@@ -42,9 +42,12 @@ layout {
     }
 }
 
-// Display layout, copied from KDE's kwinoutputconfig.json: Samsung 1080p on the
-// left, Dell 4K in the middle (1.7x, 240 Hz, primary), AOC 1080p rotated upright
-// on the right. Positions are logical (scaled) pixels and must stay adjacent —
+// Display layouts for both machines. niri matches a block by connector and
+// ignores blocks whose output is not connected, so the sets coexist.
+//
+// desknix, copied from KDE's kwinoutputconfig.json: Samsung 1080p on the left,
+// Dell 4K in the middle (1.7x, 240 Hz, primary), AOC 1080p rotated upright on
+// the right. Positions are logical (scaled) pixels and must stay adjacent —
 // the cursor only crosses between touching outputs. niri replaces an output's
 // position if it would overlap another one.
 output "DP-6" {
@@ -82,6 +85,13 @@ output "DP-4" {
             proportion 0.33333
         }
     }
+}
+
+// lapnix: single 16:10 panel (~163 physical dpi), 1.25 ≈ 120 logical dpi. Only
+// output on that machine, so it is auto-placed at 0,0 and focused on startup.
+output "eDP-1" {
+    mode "1920x1200@60.003"
+    scale 1
 }
 
 // IMPORTANT: niri does not fill in the default keybindings. Most sections get
@@ -294,3 +304,4 @@ layer-rule {
 debug {
     honor-xdg-activation-with-invalid-serial
 }
+
