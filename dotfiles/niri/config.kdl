@@ -42,14 +42,11 @@ layout {
     }
 }
 
+// niri has no titlebars of its own; without this, apps like foot draw one.
+prefer-no-csd
+
 // Display layouts for both machines. niri matches a block by connector and
 // ignores blocks whose output is not connected, so the sets coexist.
-//
-// desknix, copied from KDE's kwinoutputconfig.json: Samsung 1080p on the left,
-// Dell 4K in the middle (1.7x, 240 Hz, primary), AOC 1080p rotated upright on
-// the right. Positions are logical (scaled) pixels and must stay adjacent —
-// the cursor only crosses between touching outputs. niri replaces an output's
-// position if it would overlap another one.
 output "DP-6" {
     mode "3840x2160@239.991"
     scale 1.7
